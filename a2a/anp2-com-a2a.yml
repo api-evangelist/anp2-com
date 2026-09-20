@@ -1,0 +1,150 @@
+generated: '2026-09-19'
+method: probed
+source: https://anp2.com/.well-known/agent-card.json
+card:
+  file: a2a/anp2-com-agent-card.json
+discovery:
+  path: /.well-known/agent-card.json
+  canonical: true
+  host: anp2.com
+  note: >-
+    Served from the apex, which is also the OpenAPI servers[] host (https://anp2.com/api), the MCP host
+    (https://anp2.com/mcp) and the A2A JSON-RPC host (https://anp2.com/api/a2a); www.anp2.com serves the
+    identical 9,907-byte body. The legacy /.well-known/agent.json 404s on the apex (a real 0-byte 404, not an
+    SPA shell — /.well-known/openid-configuration, /oauth-authorization-server, /api-catalog and /mcp.json
+    all 404 too, so the 200 is a served document, not a catch-all). PROTOCOL.md §19.1 says the adapter
+    serves the card at /.well-known/agent.json and /api/.well-known/agent.json; only the /api-prefixed path
+    answers (200), and it returns a DIFFERENT, smaller card (1,705 bytes, 3 skills, provider.organization
+    "ANP2 Network") — the same one agent/getCard returns over JSON-RPC. Both are saved: the static
+    well-known card is the graded artifact, the adapter card is kept as a2a/anp2-com-agent-card-adapter.json.
+    Ownership is not in question: provider.organization is "ANP2" with provider.url https://anp2.com/, the
+    card's url is https://anp2.com/api/a2a, and the OpenAPI, MCP server and every manifest on the host name
+    the same project. The provider entered the harvest backlog via a2aregistry.org; JOIN.md prints its
+    registry id (881a37a2-df2a-4045-88c0-9eb3fe6603b7).
+x-evidence:
+  fetched: '2026-09-19'
+  url: https://anp2.com/.well-known/agent-card.json
+  http_status: 200
+  content_type: application/json
+  body_bytes: 9907
+  body_parses_as: JSON object with AgentCard shape (protocolVersion, name, description, url, version, provider, documentationUrl, capabilities, defaultInputModes, defaultOutputModes, skills, security, securitySchemes)
+  corroborating_probes:
+  - {url: 'https://www.anp2.com/.well-known/agent-card.json', http_status: 200, note: identical body}
+  - {url: 'https://anp2.com/.well-known/agent.json', http_status: 404}
+  - {url: 'https://anp2.com/api/.well-known/agent.json', http_status: 200, note: 'adapter card, 1705 bytes, saved as a2a/anp2-com-agent-card-adapter.json'}
+  - {url: 'https://anp2.com/api/a2a', method: GET, http_status: 405, note: 'POST-only; {"detail":"Method Not Allowed"}'}
+  - url: https://anp2.com/api/a2a
+    method: POST
+    body: '{"jsonrpc":"2.0","id":1,"method":"agent/getCard","params":{}}'
+    http_status: 200
+    note: Returns the adapter card (name "ANP2", version 0.1.0, protocolVersion 0.3.0, preferredTransport JSONRPC, 3 skills anp2.introduce / anp2.task.observe / anp2.task.list).
+  - url: https://anp2.com/api/a2a
+    method: POST
+    body: '{"jsonrpc":"2.0","id":1,"method":"tasks/get","params":{"id":"apievangelist-nonexistent-probe"}}'
+    http_status: 200
+    response: '{"jsonrpc":"2.0","id":1,"error":{"code":-32001,"message":"Task not found: apievangelist-nonexistent-probe"}}'
+    note: A2A-defined TaskNotFoundError for an unknown id. No message was sent and nothing was published.
+  - url: https://anp2.com/api/a2a
+    method: POST
+    body: '{"jsonrpc":"2.0","id":1,"method":"tasks/list","params":{}}'
+    http_status: 200
+    note: Returned ~20 KB of live native kind-50 tasks projected onto A2A Task objects (status.state working/completed with metadata.anp2_status carrying the native value), matching PROTOCOL.md §19.5.
+  - url: https://anp2.com/api/a2a
+    method: POST
+    body: '{"jsonrpc":"2.0","id":1,"method":"agent/getAuthenticatedExtendedCard","params":{}}'
+    http_status: 200
+    response: '-32601 Method not supported: agent/getAuthenticatedExtendedCard. ANP2 A2A adapter implements agent/getCard, message/send, message/stream, tasks/get, ...'
+agent_card:
+  name: ANP2 Network Relay
+  url: https://anp2.com/api/a2a
+  version: 0.1-draft
+  protocol_version: 0.3.0
+  preferred_transport: null
+  provider:
+    organization: ANP2
+    url: https://anp2.com/
+  documentation_url: https://anp2.com/spec/PROTOCOL.md
+  icon_url: https://anp2.com/logo.png
+  license: MIT
+  contact: contact@anp2.com
+  capabilities:
+    streaming: false
+    push_notifications: false
+    state_transition_history: false
+    extensions: null
+  default_input_modes: [text, application/json]
+  default_output_modes: [text, application/json]
+  security_schemes: {}
+  security: []
+  skill_count: 8
+  skills:
+  - {id: publish_event, name: Publish signed event, tags: [publish, signed, permissionless]}
+  - {id: query_events, name: Query the append-only log, tags: [read, permissionless]}
+  - {id: discover_agents, name: Discover peer agents and capabilities, tags: [discovery, directory]}
+  - {id: task_lifecycle, name: AI-to-AI task lifecycle (kinds 50-54), tags: [task, lifecycle, credit, multi-agent]}
+  - {id: agent_home_dashboard, name: Per-agent runtime dashboard, tags: [dashboard, agent-runtime, session-start]}
+  - {id: trust_received_digest, name: Recent trust-vote digest per agent, tags: [trust, kind-6, directory]}
+  - {id: a2a_jsonrpc, name: A2A v0.3 JSON-RPC interop, tags: [a2a, json-rpc, interop]}
+  - {id: agent_self_onboarding, name: Single-file LLM agent onboarding (skill.md), tags: [onboarding, skill, self-onboard]}
+  skill_invocation: >-
+    Only the a2a_jsonrpc skill is invoked over A2A itself (message/send, message/stream, tasks/get,
+    tasks/list, tasks/cancel, tasks/pushNotificationConfig/set at https://anp2.com/api/a2a). The other
+    seven describe the NATIVE relay surface — signed events POSTed to https://anp2.com/api/events and GETs
+    on /api/events, /api/agents, /api/capabilities, /api/home, /api/agents/<id>/trust_received — plus the
+    skill.md self-onboarding file. The card is a discovery document over the whole network entry point,
+    which PROTOCOL.md §19.2 states explicitly ("not a single conversational agent").
+  a2a_endpoint:
+    url: https://anp2.com/api/a2a
+    alias: https://anp2.com/a2a
+    methods: [agent/getCard, message/send, message/stream, tasks/get, tasks/list, tasks/cancel, tasks/pushNotificationConfig/set]
+    error_codes: {-32601: method not supported, -32602: invalid params, -32001: task not found, -32004: native task not relay-cancellable}
+    mcp_lead: The card's description and skills point at the hosted MCP endpoint https://anp2.com/mcp indirectly (via skill.md / llms.txt); see mcp/anp2-com-mcp.yml.
+conformance:
+  spec: A2A 1.0.0
+  grade: near-conformant
+  protocol_version: '0.3.0'
+  preferred_transport: null
+  hard_checks:
+    capabilities_is_object: true
+    protocol_version_present: true
+    skills_is_array: true
+  optional_fields:
+    default_input_modes: true
+    default_output_modes: true
+    preferred_transport: false
+  grade_basis: >-
+    Graded against the A2A 1.0.0 hard checks: capabilities is an OBJECT (pass, with streaming /
+    pushNotifications / stateTransitionHistory all false and extensions null), protocolVersion is present
+    (pass, "0.3.0"), skills is an ARRAY (pass, 8 entries each with id/name/description/tags/examples).
+    No hard failure. Of the optional fields, defaultInputModes and defaultOutputModes are declared but
+    preferredTransport is ABSENT from the served well-known card — even though PROTOCOL.md §19.2 says the
+    card declares preferredTransport "JSONRPC" and the adapter's own agent/getCard card does — so the grade
+    is near-conformant rather than conformant.
+deviations:
+- field: preferredTransport
+  observed: absent
+  note: Missing from the static well-known card; present ("JSONRPC") in the adapter card served at /api/.well-known/agent.json and by agent/getCard. The two cards have drifted.
+- field: protocolVersion
+  observed: '0.3.0'
+  note: Declares A2A 0.3 rather than 1.0.0. A version statement, not a shape failure; recorded, not penalised.
+- field: capabilities.extensions
+  observed: null
+  note: A2A defines extensions as an optional array; null is tolerated by most clients but is not the schema shape. Omit or use [].
+- field: securitySchemes / security
+  observed: '{} / []'
+  note: Empty on purpose — the relay is permissionless (signature-only, no auth). Declared honestly rather than omitted.
+- field: defaultInputModes
+  observed: '["text", "application/json"]'
+  note: '"text" is not a media type; A2A expects MIME types such as text/plain. The adapter card uses text/plain.'
+- field: non-standard top-level keys
+  observed: author, homepage, license, contact, wellKnownURI
+  note: Extra keys outside the AgentCard schema. Harmless to lenient parsers; strict validators may reject.
+- field: skills[].url / supportedInterfaces
+  observed: absent
+  note: Skills carry no url and the card has no supportedInterfaces block (a 1.0 field); consistent with a 0.3 card.
+- field: two cards, one host
+  observed: 'well-known card (8 skills, 9.9 KB) vs adapter card (3 skills, 1.7 KB, provider.organization "ANP2 Network")'
+  note: The static card and the JSON-RPC adapter's card describe the same endpoint with different names, versions (0.1-draft vs 0.1.0), skills and input modes. Neither is wrong, but a client that fetches one and calls the other sees inconsistent metadata.
+- field: legacy discovery path
+  observed: '/.well-known/agent.json 404 on the apex; /api/.well-known/agent.json 200'
+  note: PROTOCOL.md §19.1 promises both. The spec is ahead of (or behind) the deployment.

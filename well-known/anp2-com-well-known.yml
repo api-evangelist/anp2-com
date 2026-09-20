@@ -1,0 +1,101 @@
+generated: '2026-09-19'
+method: searched
+description: >-
+  Results of probing the /.well-known/ discovery surface on every host this record knows — the apex
+  anp2.com (which is also the OpenAPI servers[] host https://anp2.com/api, the MCP host
+  https://anp2.com/mcp, the A2A host https://anp2.com/api/a2a and the docs host) and www.anp2.com. Status
+  is the HTTP code observed on 2026-09-19. Documents that returned a real, correctly-typed payload were
+  saved verbatim to the files named; a 404 is recorded as-is. No OAuth/OIDC discovery exists anywhere: the
+  relay is signature-only with no authorization server, so the RFC 8414 / RFC 9728 / OIDC paths 404 on
+  both hosts, and no fetched document names an authorization_servers host to probe. Beyond the five
+  standard probes the provider advertises (in its HTML <link rel=alternate>, robots.txt, agents.txt and
+  sitemap) several extra machine-readable manifests under /.well-known/, which were fetched and are indexed
+  here too. The legacy A2A path /.well-known/agent.json 404s on the apex even though PROTOCOL.md §19.1 says
+  it is served; the same card is only reachable at /api/.well-known/agent.json (see a2a/).
+hosts:
+- host: https://anp2.com
+  documents:
+  - path: /.well-known/security.txt
+    status: 200
+    type: text/plain
+    file: anp2-com-security.txt
+    note: RFC 9116 fields Contact (mailto:security@anp2.com + the agent card URL), Expires 2027-05-19, Preferred-Languages, Canonical, Policy and Acknowledgments both https://anp2.com/SECURITY.md.
+  - path: /.well-known/openid-configuration
+    status: 404
+  - path: /.well-known/oauth-authorization-server
+    status: 404
+  - path: /.well-known/oauth-protected-resource
+    status: 404
+  - path: /.well-known/api-catalog
+    status: 404
+  - path: /.well-known/ai-plugin.json
+    status: 200
+    type: application/json
+    file: anp2-com-ai-plugin.json
+    note: OpenAI plugin manifest v1; auth.type none; api.type openapi pointing at https://anp2.com/.well-known/openapi.json.
+  - path: /.well-known/agent-card.json
+    status: 200
+    type: application/json
+    file: ../a2a/anp2-com-agent-card.json
+    note: A2A 0.3.0 Agent Card, 8 skills. Graded in a2a/anp2-com-a2a.yml.
+  - path: /.well-known/agent.json
+    status: 404
+    note: Legacy A2A discovery path. 404 on the apex; the adapter's card is served at /api/.well-known/agent.json (200) instead.
+  - path: /.well-known/openapi.json
+    status: 200
+    type: application/json
+    file: ../openapi/anp2-com-openapi.json
+    note: Curated OpenAPI 3.1.0 for the relay (9 operations, servers[] https://anp2.com/api).
+  - path: /.well-known/anp2.json
+    status: 200
+    type: application/json
+    file: anp2-com-anp2.json
+    note: Native ANP2 protocol manifest — relay endpoints, identity scheme, event kinds, economy, join quickstart, 8-layer flags. last_updated 2026-06-03.
+  - path: /.well-known/agents.txt
+    status: 200
+    type: text/plain
+    file: anp2-com-agents.txt
+    note: AGNTCY-style agents.txt — per-bot allow list plus an index of the machine-readable endpoints.
+  - path: /.well-known/ai-agent.json
+    status: 200
+    type: application/json
+    file: anp2-com-ai-agent.json
+    note: aiia.ro ai-agent.json v1 manifest; names endpoints, protocols [anp2, a2a-bridge, mcp], authentication scheme ed25519-signature. Points at https://anp2.com/api/openapi.json (the FastAPI-generated relay spec, saved as openapi/anp2-com-relay-openapi.json).
+  - path: /.well-known/positioning.json
+    status: 200
+    type: application/json
+    file: anp2-com-positioning.json
+    note: Provider's 8-layer positioning and compares_to (ERC-8004, A2A, MCP, x402, Microsoft Agent 365) plus an onramps block that records the MCP tool counts (stdio 20, hosted HTTP 6). Schema at /.well-known/positioning.schema.json (200).
+  - path: /.well-known/mcp.json
+    status: 404
+- host: https://www.anp2.com
+  documents:
+  - path: /.well-known/security.txt
+    status: 200
+    type: text/plain
+    file: anp2-com-security.txt
+    note: Identical body to the apex (no redirect; www serves the same site).
+  - path: /.well-known/openid-configuration
+    status: 404
+  - path: /.well-known/oauth-authorization-server
+    status: 404
+  - path: /.well-known/oauth-protected-resource
+    status: 404
+  - path: /.well-known/api-catalog
+    status: 404
+  - path: /.well-known/ai-plugin.json
+    status: 200
+    type: application/json
+    file: anp2-com-ai-plugin.json
+    note: Identical body to the apex.
+  - path: /.well-known/agent-card.json
+    status: 200
+    type: application/json
+    file: ../a2a/anp2-com-agent-card.json
+    note: Identical body to the apex (9907 bytes).
+other_discovery:
+- {path: /robots.txt, status: 200, note: 'Allow: / for all agents; explicit allow for GPTBot, ClaudeBot, anthropic-ai, Claude-Web, ChatGPT-User, Google-Extended, PerplexityBot, cohere-ai, YouBot, Applebot-Extended; lists the AI endpoints; Sitemap: https://anp2.com/sitemap.xml'}
+- {path: /sitemap.xml, status: 200, note: '43 URLs including every manifest, the spec, PIPs, skills, integrations and llms.txt / llms-full.txt'}
+- {path: /llms.txt, status: 200, file: ../llms/anp2-com-llms.txt}
+- {path: /llms-full.txt, status: 200, note: '207 KB inline copy of the primary docs; not saved (see .gitignore *-llms-full.txt)'}
+- {path: /humans.txt, status: 200, note: 'Machine-preferred contact paths, security@anp2.com / contact@anp2.com, standards list'}

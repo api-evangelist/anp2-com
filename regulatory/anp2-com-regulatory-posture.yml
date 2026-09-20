@@ -1,0 +1,99 @@
+generated: '2026-09-19'
+method: searched
+probe: true
+source: https://anp2.com/SECURITY.md
+description: >-
+  Horizontal regulatory signals ANP2 actually publishes. ANP2 is a non-commercial, AI-operated open protocol
+  ("There is no commercial entity behind ANP2 yet", FAQ) with no customer accounts, no pricing and no site-wide
+  terms or privacy policy (/terms, /privacy, /legal/dpa, /legal/subprocessors, /accessibility all 404). What
+  it does publish is unusually explicit about AI operation and about which software versions it supports.
+  Nothing below infers that any regime applies.
+signals:
+  ai_transparency:
+    url: https://anp2.com/JOIN.md
+    section: footer + heartbeat.md footer + skill.md §13 Etiquette
+    evidence:
+    - source: https://anp2.com/JOIN.md
+      http_status: 200
+      fetched: '2026-09-19'
+      quote: 'Maintained autonomously by the ANP2 relay operator agent. a2aregistry id: 881a37a2-df2a-4045-88c0-9eb3fe6603b7.'
+    - source: https://anp2.com/heartbeat.md
+      http_status: 200
+      fetched: '2026-09-19'
+      quote: 'Last updated: 2026-06-10 UTC. Updated by: ANP2 relay operator agent.'
+    - source: https://anp2.com/STATUS.md
+      http_status: 200
+      fetched: '2026-09-19'
+      quote: 'Snapshot of the seed-bootstrapped reference economy at https://anp2.com (observable lifecycle, not external adoption) — updated as the AI maintainer iterates.'
+    - source: https://anp2.com/skill.md
+      http_status: 200
+      fetched: '2026-09-19'
+      quote: 'Be honest about model_family in your kind-0. Misrepresenting your model erodes future trust.'
+    - source: https://anp2.com/skills/anp2/SKILL.md
+      http_status: 200
+      fetched: '2026-09-19'
+      quote: 'Be transparent: if your agent is an AI agent, say so in its kind-0 `description`.'
+    note: >-
+      A published disclosure that the operator of the service is itself an AI agent, that the documentation
+      is AI-maintained, and a stated norm that participating agents disclose they are AI and which model
+      family they run (kind-0 model_family is a spec field, PROTOCOL.md §4.1). This is the substance of an
+      AI-interaction transparency statement; it lives in doc footers and etiquette rules rather than on a
+      dedicated /ai/transparency page (404).
+  support_lifetime:
+    url: https://anp2.com/SECURITY.md
+    section: Supported versions
+    stated_period: >-
+      Spec v0.1-draft (current): Yes — security-relevant clarifications land via PIP | anp2-relay reference
+      impl 0.1.x: Yes | anp2-client SDK 0.1.x: Yes | anp2-mcp-server 0.1.x: Yes | Anything older / forks:
+      Best-effort only. "The protocol is DRAFT. Breaking changes before v1.0 are expected and are not by
+      themselves treated as security bugs."
+    evidence:
+    - source: https://anp2.com/SECURITY.md
+      http_status: 200
+      fetched: '2026-09-19'
+      quote: '| Spec | v0.1-draft (current) | Yes — security-relevant clarifications land via PIP | ... | Anything older / forks | — | Best-effort only |'
+    note: >-
+      A verbatim supported-versions table with per-component support statements, plus severity-tiered
+      acknowledge / patch / disclosure targets (S1 24 h / 72 h-7 d / 14 d … S4 10 business days / next
+      minor). No end-of-support DATE is stated, and the table's 0.1.x rows lag the published packages
+      (0.2.x / 0.3.0). Recorded verbatim; not normalised to a number.
+probed_absent:
+- signal: sbom
+  urls:
+  - {url: 'https://anp2.com/security/sbom', status: 404}
+  note: No bill of materials published. Never derived — search only.
+- signal: accessibility_conformance
+  urls:
+  - {url: 'https://anp2.com/accessibility', status: 404}
+- signal: subprocessors
+  urls:
+  - {url: 'https://anp2.com/legal/subprocessors', status: 404}
+  note: extension-privacy.html names the AI providers a USER may connect (OpenAI, Anthropic, Google, OpenRouter) and states the extension talks only to anp2.com and that provider — these are the user's vendors, not ANP2 subprocessors.
+- signal: data_subject_request
+  urls:
+  - {url: 'https://anp2.com/privacy', status: 404}
+  - {url: 'https://anp2.com/extension-privacy.html', status: 200}
+  note: >-
+    The extension privacy policy (effective 2026-07-05) covers only the Chrome extension and states the
+    opposite of a deletion right for the network — "anything your agent posts is public and cannot be
+    deleted later"; PROTOCOL.md §10.8 acknowledges the conflict with the right to be forgotten. No request
+    channel, period or rights list is published, so no signal is recorded.
+- signal: data_residency
+  urls:
+  - {url: 'https://anp2.com/docs/data-residency', status: 404}
+  note: The relay resolves to a single AWS us-east-1 address (34.227.10.157); no residency statement is published.
+- signal: incident_notification
+  urls:
+  - {url: 'https://anp2.com/SECURITY.md', status: 200}
+  note: >-
+    SECURITY.md commits to public vulnerability ADVISORIES on a timeline (within 14 days of an S1 fix,
+    emergency advisory if exploited in the wild) and heartbeat.md says it carries "incident notices". That
+    is a coordinated-disclosure commitment, not a customer/regulator breach-notification statement, so it is
+    not recorded as an incident_notification signal.
+- signal: transparency_report
+  urls:
+  - {url: 'https://anp2.com/transparency', status: 404}
+- signal: age_assurance
+  urls:
+  - {url: 'https://anp2.com/legal/report-content', status: 404}
+  note: The network is for AI agents; no age or notice-and-action surface exists. PROTOCOL.md §7 documents kind-7 moderation flags as the in-protocol content-action mechanism, which is a protocol feature rather than a legal notice channel.

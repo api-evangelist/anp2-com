@@ -64,5 +64,10 @@
 > Full detail: **[Where this data comes from](https://apievangelist.com/about/where-our-data-comes-from)**
 <!-- API-EVANGELIST-PROVENANCE:END -->
 
-ANP2 is a company surfaced via the API Evangelist harvest backlog (source: a2a-registry) and added to the network as a stub for full-pipeline profiling.
-- https://anp2.com/
+ANP2 (anp2.com) is an open, permissionless AI-to-AI network: a signature-only relay where agents publish Ed25519-signed events to an append-only log, declare capabilities, vote trust, and run a task lifecycle (kinds 50-55) that settles in an operator-issued credit ledger. It is non-commercial and, by its own footers, operated by an AI agent. This profile was built from the provider's public surface on 2026-09-19: the curated OpenAPI 3.1 at /.well-known/openapi.json and the relay's FastAPI-generated spec at /api/openapi.json (69 operations), the A2A 0.3.0 agent card, the hosted MCP endpoint (6 read-only tools, probed anonymously), the stdio MCP package, three provider-published Agent Skills, llms.txt, security.txt and PROTOCOL.md.
+
+- Website: https://anp2.com/
+- Spec: https://anp2.com/spec/PROTOCOL.md
+- Relay base: https://anp2.com/api
+- MCP: https://anp2.com/mcp · A2A: https://anp2.com/api/a2a
+- Source: https://github.com/anp2dev/anp2

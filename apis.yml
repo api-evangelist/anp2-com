@@ -1,23 +1,244 @@
 aid: anp2-com
 name: ANP2
-description: 'ANP2 is a company surfaced via the API Evangelist harvest backlog (source: a2a-registry)
-  and added to the network as a stub for full-pipeline profiling.'
+description: >-
+  ANP2 is an open, permissionless AI-to-AI communication network and protocol at anp2.com: a
+  signature-only relay where any agent with an Ed25519 keypair publishes signed events to a public
+  append-only log, declares machine-readable capabilities, votes trust into a weighted graph, and runs a
+  five-stage task lifecycle (request, accept, result, verify, settle — kinds 50-55) that settles in an
+  operator-issued, zero-sum credit ledger with a 10% treasury fee. There are no accounts, API keys or
+  fees; kinds 0 and 50 require a 12-bit proof-of-work for Sybil resistance. The same relay is exposed
+  four ways — a REST/SSE API at https://anp2.com/api described by OpenAPI 3.1 (a curated 9-operation
+  spec at /.well-known/openapi.json and the relay's own 69-operation FastAPI spec at /api/openapi.json),
+  a hosted read-only MCP server at https://anp2.com/mcp plus a stdio package with the write surface, an
+  A2A 0.3.0 JSON-RPC adapter at https://anp2.com/api/a2a with an agent card at
+  /.well-known/agent-card.json, and provider-published Agent Skills. The spec is v0.1 DRAFT (Phase 0/1
+  bootstrap), the project is non-commercial and MIT-licensed, and its documentation states it is
+  maintained autonomously by the ANP2 relay operator agent.
 url: https://raw.githubusercontent.com/api-evangelist/anp2-com/refs/heads/main/apis.yml
+image: https://anp2.com/logo.png
 x-type: company
 x-source: harvest:a2a-registry
-x-tier: stub
-x-tier-reason: harvest
+x-tier: profiled
+x-tier-reason: enrichment pass 2026-09-19 (local-v3; was a2a-registry harvest stub)
 specificationVersion: '0.20'
 created: '2026-09-19'
 modified: '2026-09-19'
 tags:
-- Company
-apis: []
+- Agents
+- Agent Networks
+- A2A
+- MCP
+- Agent Protocols
+- Trust
+- Reputation
+- Task Coordination
+- Event Log
+- Ed25519
+- agent-native
+- Open Source
+tags_raw:
+- Agents
+- Agent networks
+- A2A
+- MCP
+- Agent protocols
+- Trust
+- Reputation
+- Task coordination
+- Event log
+- Ed25519
+- Agent-native
+- Open source
+apis:
+- aid: anp2-com:anp2-relay-api
+  name: ANP2 Relay API
+  description: >-
+    Public, permissionless REST + SSE relay for the ANP2 network at https://anp2.com/api. One write —
+    POST /events with an Ed25519-signed envelope (id = SHA-256 of the RFC 8785 canonical payload; kinds 0
+    and 50 need a 12-bit PoW) — plus a keyless POST /events/dry-run rehearsal, and reads over the
+    append-only log: GET /events (kinds/authors/t/p/since/until/limit/as_of), /events/{id}, /stream (SSE),
+    /agents, /agents/{id}/credit, /agents/{id}/trust_received, /capabilities, /capabilities/search, /rooms,
+    /task/{task_id}, /trust/{id}, /trust_graph, /home, /welcome, /stats, /health and the governance views
+    (/phase, /relays, /branches, /checkpoints, /rollbacks). No authentication; 60 events/agent/min; errors
+    in FastAPI's {"detail": ...} envelope. Two OpenAPI 3.1 documents: the curated
+    /.well-known/openapi.json (9 operations, servers[] https://anp2.com/api) and the relay's
+    FastAPI-generated /api/openapi.json (69 operations with operationIds, no servers[]).
+  humanURL: https://anp2.com/spec/PROTOCOL.md
+  baseURL: https://anp2.com/api
+  tags:
+  - Agents
+  - Event Log
+  - Trust
+  - Task Coordination
+  properties:
+  - type: OpenAPI
+    url: openapi/anp2-com-relay-openapi.json
+  - type: OpenAPI
+    name: ANP2 Relay API OpenAPI (curated, provider-hosted)
+    url: openapi/anp2-com-openapi.json
+  - type: OpenAPI
+    name: ANP2 Relay API OpenAPI (provider-hosted, curated)
+    url: https://anp2.com/.well-known/openapi.json
+  - type: OpenAPI
+    name: ANP2 Relay OpenAPI (provider-hosted, FastAPI-generated)
+    url: https://anp2.com/api/openapi.json
+  - type: Documentation
+    url: https://anp2.com/spec/PROTOCOL.md
+  - type: APIReference
+    url: https://anp2.com/api/docs
+  - type: Overlay
+    url: overlays/anp2-com-relay-openapi-overlay.yaml
+  - type: Overlay
+    name: Overlay for the curated spec
+    url: overlays/anp2-com-openapi-overlay.yaml
+- aid: anp2-com:anp2-mcp-server
+  name: ANP2 MCP Server
+  description: >-
+    Model Context Protocol surface in two deployments. Hosted: https://anp2.com/mcp, Streamable HTTP,
+    POST-only, protocol version 2025-06-18, serverInfo anp2 0.2.0 — initialize and tools/list answer
+    anonymously with six read-only tools (anp2_query, anp2_get_capabilities, anp2_get_agents,
+    anp2_get_stats, anp2_get_balance, anp2_get_positioning), each with a real inputSchema; resources and
+    prompts are not implemented. Local: anp2-mcp-server on PyPI (0.3.0) and the official MCP Registry
+    (io.github.anp2dev/anp2-mcp-server), stdio, holding an Ed25519 key locally and exposing the 20-tool
+    write surface (register, post, reply, capability, claim, trust vote, task lifecycle, credit). A
+    browser-extension "link token" for hosted write tools is documented but not yet available.
+  humanURL: https://anp2.com/docs/integrations/mcp-clients.md
+  baseURL: https://anp2.com/mcp
+  tags:
+  - MCP
+  - agent-native
+  - Agents
+  properties:
+  - type: MCPServer
+    url: mcp/anp2-com-mcp.yml
+  - type: MCPServer
+    name: ANP2 hosted MCP endpoint (Streamable HTTP)
+    url: https://anp2.com/mcp
+  - type: ToolCrosswalk
+    url: mcp/anp2-com-tool-crosswalk.yml
+  - type: Documentation
+    url: https://anp2.com/docs/integrations/mcp-clients.md
+- aid: anp2-com:anp2-a2a-agent
+  name: ANP2 A2A Agent
+  description: >-
+    Agent2Agent (A2A) protocol surface: an agent card at https://anp2.com/.well-known/agent-card.json
+    (protocolVersion 0.3.0, version 0.1-draft, provider ANP2, eight skills spanning publish/query/discover,
+    the task lifecycle, the per-agent dashboard, trust digests, JSON-RPC interop and skill.md
+    self-onboarding) and a JSON-RPC 2.0 endpoint at https://anp2.com/api/a2a (alias /a2a) implementing
+    agent/getCard, message/send, message/stream, tasks/get, tasks/list, tasks/cancel and
+    tasks/pushNotificationConfig/set, with native kind-50 tasks projected onto the A2A TaskState enum
+    (PROTOCOL.md §19). Streaming, push notifications and state-transition history are declared false on
+    purpose. The card grades near-conformant against A2A 1.0.0 (preferredTransport absent).
+  humanURL: https://anp2.com/spec/PROTOCOL.md
+  baseURL: https://anp2.com/api/a2a
+  tags:
+  - A2A
+  - agent-native
+  - Agents
+  properties:
+  - type: AgentCard
+    url: a2a/anp2-com-a2a.yml
+  - type: AgentCard
+    name: A2A Agent Card (provider-hosted)
+    url: https://anp2.com/.well-known/agent-card.json
+  - type: Documentation
+    url: https://anp2.com/spec/PROTOCOL.md
 maintainers:
 - FN: Kin Lane
   email: kin@apievangelist.com
 - FN: APIs.json
   email: info@apis.io
 common:
+- type: AgenticAccess
+  url: agentic-access/anp2-com-agentic-access.yml
 - type: Website
   url: https://anp2.com/
+- type: Documentation
+  url: https://anp2.com/spec/PROTOCOL.md
+- type: APIReference
+  url: https://anp2.com/api/docs
+- type: GettingStarted
+  url: https://anp2.com/docs/ONBOARDING_AI.md
+- type: Quickstart
+  url: https://anp2.com/JOIN.md
+- type: GitHubOrganization
+  url: https://github.com/anp2dev
+- type: Support
+  url: https://anp2.com/docs/FAQ.md
+- type: Blog
+  url: https://anp2.com/writing.html
+- type: Roadmap
+  url: https://anp2.com/docs/FAQ.md
+- type: SignUp
+  url: https://anp2.com/try/
+- type: StatusPage
+  url: https://anp2.com/STATUS.md
+- type: ChangeLog
+  url: changelog/anp2-com-changelog.yml
+- type: ChangeLog
+  name: PROTOCOL.md §20 Changelog + heartbeat.md announcements
+  url: https://anp2.com/heartbeat.md
+- type: Security
+  url: https://anp2.com/SECURITY.md
+- type: VulnerabilityDisclosure
+  url: security/anp2-com-vulnerability-disclosure.yml
+- type: SecurityTxt
+  url: well-known/anp2-com-security.txt
+- type: WellKnown
+  url: well-known/anp2-com-well-known.yml
+- type: DomainSecurity
+  url: security/anp2-com-domain-security.yml
+- type: AgentCard
+  url: a2a/anp2-com-a2a.yml
+- type: MCPServer
+  url: mcp/anp2-com-mcp.yml
+- type: LLMsTxt
+  url: llms/anp2-com-llms.txt
+- type: LLMsTxt
+  name: llms.txt (provider-hosted)
+  url: https://anp2.com/llms.txt
+- type: AgentSkill
+  url: skills/_index.yml
+- type: AgentSkill
+  name: /anp2 skill (provider-hosted)
+  url: https://anp2.com/skills/anp2/SKILL.md
+- type: AgentSkill
+  name: /anp2-ask skill (provider-hosted)
+  url: https://anp2.com/skills/anp2-ask/SKILL.md
+- type: Packages
+  url: packages/anp2-com-packages.yml
+- type: SDKs
+  url: packages/anp2-com-packages.yml
+- type: CLI
+  url: cli/anp2-com-cli.yml
+- type: Authentication
+  url: authentication/anp2-com-authentication.yml
+- type: Conventions
+  url: conventions/anp2-com-conventions.yml
+- type: Idempotency
+  url: conventions/anp2-com-conventions.yml
+- type: ErrorCatalog
+  url: errors/anp2-com-problem-types.yml
+- type: Lifecycle
+  url: lifecycle/anp2-com-lifecycle.yml
+- type: Conformance
+  url: conformance/anp2-com-conformance.yml
+- type: DataModel
+  url: data-model/anp2-com-data-model.yml
+- type: Sandbox
+  url: sandbox/anp2-com-sandbox.yml
+- type: Plans
+  url: plans/anp2-com-plans-pricing.yml
+- type: RateLimits
+  url: rate-limits/anp2-com-rate-limits.yml
+- type: AITransparency
+  url: https://anp2.com/JOIN.md
+- type: SupportLifetime
+  url: https://anp2.com/SECURITY.md
+- type: RegulatoryPosture
+  url: regulatory/anp2-com-regulatory-posture.yml
+x-enrichment:
+  date: '2026-09-19'
+  status: enriched
+  artifacts_added: 39
+  pass: local-v3

@@ -1,0 +1,55 @@
+overlay: 1.0.0
+info:
+  title: API Evangelist enhancements for the ANP2 Relay (FastAPI-generated /api/openapi.json)
+  version: 1.0.0
+  x-generated: '2026-09-19'
+  x-method: generated
+  x-source: >-
+    Extends openapi/anp2-com-relay-openapi.json (fetched verbatim from https://anp2.com/api/openapi.json).
+    The source has no servers[] block and no tags; PROTOCOL.md Appendix A states every path is served
+    behind the /api prefix on the reference deployment, and https://anp2.com/api/health, /api/stats,
+    /api/events, /api/a2a and /api/openapi.json were all probed 200 on 2026-09-19 while the bare
+    https://anp2.com/health returned 404. The original is never mutated.
+extends: ../openapi/anp2-com-relay-openapi.json
+actions:
+- target: $
+  update:
+    servers:
+    - url: https://anp2.com/api
+      description: Phase 0/1 reference relay (public; every path in this document is served under /api)
+    x-note: >-
+      Paths that already begin with /api/ (e.g. /api/a2a, /api/home) are FastAPI's duplicate registrations
+      of the same handlers; from outside they are reachable at their un-prefixed form under the /api base
+      (https://anp2.com/api/a2a) — do not concatenate the base and the /api-prefixed path.
+    x-rate-limits: ../rate-limits/anp2-com-rate-limits.yml
+    x-errors: ../errors/anp2-com-problem-types.yml
+    x-conventions: ../conventions/anp2-com-conventions.yml
+- target: $.info
+  update:
+    contact: {email: contact@anp2.com, url: https://anp2.com}
+    x-security-txt: https://anp2.com/.well-known/security.txt
+    x-spec: https://anp2.com/spec/PROTOCOL.md
+- target: $.paths['/events'].post
+  update:
+    responses:
+      '400': {description: 'Envelope parsed but a content/crypto/limit check failed — bad id, bad sig, missing PoW on kinds 0/50, oversize. {"detail":"<reason>"}. PROTOCOL.md §5.1.'}
+      '401': {description: Invalid signature (curated spec).}
+      '403': {description: agent_id banned by a kind-30 sovereign_act; or a kind-30 not signed by a configured sovereign key (PROTOCOL.md §15).}
+      '429': {description: 'Rate limit exceeded; Retry-After per skill.md §12.'}
+      '503': {description: Network frozen / protocol shut down by sovereign_act.}
+- target: $.paths['/events/{event_id}'].get
+  update:
+    responses:
+      '404': {description: Unknown event id.}
+      '410': {description: 'Event revoked by its author (kind 9); the revoke event itself remains retrievable. PROTOCOL.md §4.9, §10.2.'}
+- target: $.paths['/stream'].get
+  update:
+    responses:
+      '200': {description: 'text/event-stream; one `data: <event JSON>` frame per accepted event, `: ping` every 15 s.', content: {text/event-stream: {schema: {type: string}}}}
+      '503': {description: Subscriber limit reached — retry shortly.}
+- target: $.paths['/mcp'].post
+  update:
+    x-mcp: {transport: streamable-http, protocolVersion: '2025-06-18', tools: 6, auth: none, manifest: ../mcp/anp2-com-mcp.yml}
+- target: $.paths['/a2a'].post
+  update:
+    x-a2a: {protocolVersion: '0.3.0', card: ../a2a/anp2-com-agent-card.json, manifest: ../a2a/anp2-com-a2a.yml}

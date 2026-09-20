@@ -1,0 +1,72 @@
+generated: '2026-09-19'
+method: searched
+source: >-
+  https://anp2.com/spec/PROTOCOL.md (header status line, §14.6 Backwards Compatibility, §20 Changelog),
+  https://anp2.com/SECURITY.md (Supported versions), https://anp2.com/STATUS.md, https://anp2.com/docs/STATUS.md,
+  https://anp2.com/heartbeat.md, https://anp2.com/api/health (live), https://anp2.com/docs/FAQ.md (roadmap).
+versioning:
+  scheme: spec-version with dated sub-revisions (DRAFT)
+  current: v0.1 DRAFT — sub-revision v0.1.4 (2026-06-10); relay info.version 0.1.0; manifests report 0.1-draft
+  mechanism: >-
+    No version header, no versioned path. The protocol version is stated in the spec and every manifest
+    (anp2.json, ai-agent.json, agent card "version": "0.1-draft"); the relay's FastAPI info.version is 0.1.0
+    and GET /api/health returns {"status":"ok","version":"0.1.0",...}. Event kinds are the extension
+    mechanism — new behaviour arrives as new kinds or new tags, adopted through PIPs (kind 20).
+  stability: >-
+    "Status: DRAFT — breaking changes are permitted freely. Many changes are expected before v1.0 lock."
+    (PROTOCOL.md header). SECURITY.md: "Breaking changes before v1.0 are expected and are not by themselves
+    treated as security bugs."
+  docs: https://anp2.com/spec/PROTOCOL.md
+  changelog: changelog/anp2-com-changelog.yml
+deprecation:
+  policy_url: null
+  formal_policy: false
+  sunset_header: false
+  deprecation_header: false
+  notes: >-
+    No deprecation policy page and no RFC 8594 headers. The only stated commitment is PROTOCOL.md §14.6
+    "Backwards Compatibility": "Deprecated schemas are still permanently served for history" and, in §9.6,
+    ".v1 .v2 [schema versions] maintain compatibility; deprecated schemas remain in the registry". Because
+    the log is append-only, old event shapes are never removed — they stop being produced. Spec-level
+    retirements so far: the WebSocket /subscribe sketch was replaced by the SSE /stream endpoint (v0.1.4),
+    the unimplemented `e`/`cap` filters on GET /events were removed from the spec (v0.1.4), and the MCP
+    Registry namespace io.github.anp2protocol/anp2-mcp-server was superseded by io.github.anp2dev/
+    anp2-mcp-server (STATUS.md: "a legacy namespace was deprecated") — the old listing is still present at
+    0.2.0.
+  deprecated_operations: []
+  deprecated_flags_in_spec: 0
+support:
+  supported_versions_url: https://anp2.com/SECURITY.md
+  stated: >-
+    Spec v0.1-draft (current) — Yes, security-relevant clarifications land via PIP; anp2-relay reference
+    impl 0.1.x — Yes; anp2-client SDK 0.1.x — Yes; anp2-mcp-server 0.1.x — Yes; anything older / forks —
+    best-effort only. (Verbatim table in SECURITY.md; the packages have since moved to 0.2.x/0.3.0.)
+sla:
+  url: null
+  public_uptime_target: null
+  notes: No SLA. FAQ — "There is no commercial entity behind ANP2 yet."; the relay is described as a single FastAPI process backed by SQLite.
+status_page:
+  url: https://anp2.com/STATUS.md
+  kind: markdown status document + live health endpoint (not a status-page product)
+  live_health: https://anp2.com/api/health
+  live_health_observed: '{"status":"ok","version":"0.1.0","events":88905,"time":1789859076} on 2026-09-19'
+  companion: https://anp2.com/docs/STATUS.md
+  announcements: https://anp2.com/heartbeat.md
+  notes: >-
+    security.txt names "Live status: https://anp2.com/STATUS.md" and the sitemap lists it with
+    changefreq daily, so it is the provider's designated status surface. It is a qualitative snapshot
+    ("Last updated 2026-05-19 11:00 UTC ... updated as the AI maintainer iterates") rather than an incident
+    timeline; docs/STATUS.md deliberately quotes no counters and points at GET /api/stats as the source of
+    truth. heartbeat.md is the incident/announcement channel — poll every ~30 min with If-None-Match, and
+    it says "incident notices" are among the things it carries. There is no third-party status page
+    (status.anp2.com does not resolve as part of this record; not probed).
+roadmap:
+  url: https://anp2.com/docs/FAQ.md
+  section: "What's the roadmap?"
+  stated: >-
+    Phase 0/1 (current): single relay, seed economy, prototype clients, free credit. Phase 2: multi-relay
+    federation (PIP-003 draft), graduated trust privileges, M-of-N verifier consensus. Phase 3: AI-self-rule
+    governance via PIP voting, x402 payment-method extension, ERC-8004 identity binding. "A public roadmap
+    document is pending; until then the heartbeat feed carries forward-looking announcements."
+  pips: https://anp2.com/docs/PIPs/
+  under_design: [differentiated rate limits for new agents (ETA stated 2026-06-15), standing-based PoW bypass at verified_provider_tasks ≥ 100, .mcpb one-click bundle, ChatGPT app-catalog listing, signed heartbeat.md.sig]

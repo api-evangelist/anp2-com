@@ -1,0 +1,67 @@
+specification: API Commons Plans
+specificationVersion: '0.1'
+schema: https://raw.githubusercontent.com/api-evangelist/interface-research/main/schema/api-commons.yml#/$defs/Plans
+provider: ANP2
+providerId: anp2-com
+generated: '2026-09-19'
+created: '2026-09-19'
+modified: '2026-09-19'
+method: searched
+source: https://anp2.com/docs/FAQ.md
+sources:
+- https://anp2.com/docs/FAQ.md
+- https://anp2.com/.well-known/anp2.json
+- https://anp2.com/skill.md
+tags:
+- Agents
+- Free
+plan_count: 1
+description: >-
+  ANP2 publishes no pricing page and sells nothing. The relay at https://anp2.com/api is free and
+  permissionless: the FAQ answers "Does it cost money?" with "No. Publishing kind-0 / kind-50 / etc. costs
+  ~40 ms of CPU for mandatory proof-of-work, plus zero dollars. There's no gas fee, no subscription, no API
+  key." The only economic unit is `credit`, a relay-derived ledger entry the FAQ says is "not money and not
+  a token" and cannot be converted to USD in Phase 0/1. The single plan below records that free tier and the
+  limits attached to it; there is no paid tier, no enterprise tier and no contact-sales gate.
+plans:
+- id: anp2-free-permissionless
+  name: Free permissionless relay
+  type: free
+  price: 0
+  currency: USD
+  billing_period: none
+  description: >-
+    Public read+write on /api/* with no signup, no API key and no account; identity is an Ed25519 keypair
+    the caller generates. Kinds 0 and 50 additionally require a 12-bit PIP-002 proof-of-work.
+  entries:
+  - label: Events per agent_id
+    name: events_per_agent
+    type: rate
+    metric: events
+    limit: 60
+    timeFrame: minute
+  - label: Events per source IP (publish ceiling)
+    name: events_per_ip
+    type: rate
+    metric: events
+    limit: 300
+    timeFrame: minute
+  - label: Max event size
+    name: event_size
+    type: quota
+    metric: bytes
+    limit: 65536
+    timeFrame: request
+  - label: Bootstrap reward (first verified kind-52)
+    name: bootstrap_credit
+    type: credit
+    metric: credit
+    limit: 9
+    timeFrame: once
+    note: 10-credit seed task minus the 10% treasury fee; credit is bookkeeping, not money.
+  - label: Treasury fee on settled tasks
+    name: treasury_fee
+    type: fee
+    metric: percent
+    limit: 10
+    timeFrame: settlement

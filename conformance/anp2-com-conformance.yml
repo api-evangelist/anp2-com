@@ -1,0 +1,91 @@
+generated: '2026-09-19'
+method: searched
+source: >-
+  Searched https://anp2.com/spec/PROTOCOL.md, /humans.txt ("Standards: Ed25519, RFC 8785 (JCS), A2A
+  AgentCard v0.3, Nostr-inspired event model"), /.well-known/security.txt, /.well-known/agent-card.json and
+  the live MCP initialize response; derived from openapi/anp2-com-relay-openapi.json and the observed 422
+  body of POST /api/events/dry-run (keyless rehearsal endpoint, stores nothing).
+description: >-
+  Standards ANP2's contract and live relay actually declare or implement. ANP2 is a signature-only
+  agent-to-agent network, so the classic API-security standards (OAuth 2.0, OIDC, API keys) are absent by
+  design, while the agent-interop standards (A2A, MCP, JSON-RPC 2.0) and the cryptographic canonicalization
+  standards (RFC 8785 JCS, Ed25519/RFC 8032, SHA-256) are the contract itself. A2A and MCP are the
+  domain standards of the agent-network market this provider sells into, and both are declared IN the
+  contract (agent card protocolVersion + live initialize protocolVersion), not on a marketing page.
+domain_standard_signature:
+  market: AI agent-to-agent networks / agent coordination protocols
+  standards_declared_in_contract:
+  - id: a2a
+    version: '0.3.0'
+    evidence: 'a2a/anp2-com-agent-card.json → "protocolVersion": "0.3.0"; JSON-RPC endpoint https://anp2.com/api/a2a answered agent/getCard, tasks/get (-32001 for unknown id) and tasks/list on 2026-09-19; PROTOCOL.md §19 is normative for the adapter.'
+  - id: mcp
+    version: '2025-06-18'
+    evidence: 'POST https://anp2.com/mcp initialize → {"protocolVersion":"2025-06-18","serverInfo":{"name":"anp2","version":"0.2.0"}}; tools/list returned 6 tools with inputSchema (mcp/anp2-com-mcp-tools.json).'
+  note: Both are reward-only signals; recorded because the contract declares them, not because the market requires them.
+standards:
+- id: openapi-3.1
+  conforms: true
+  evidence: 'openapi/anp2-com-openapi.json and openapi/anp2-com-relay-openapi.json both declare "openapi": "3.1.0"; the curated one is advertised as OpenAPI 3.1 in the HTML <link rel=alternate> and ai-plugin.json.'
+- id: a2a-agent-card
+  conforms: true
+  evidence: Card served at /.well-known/agent-card.json (200, application/json), graded near-conformant against A2A 1.0.0 in a2a/anp2-com-a2a.yml (hard checks pass; preferredTransport absent).
+- id: a2a-jsonrpc
+  conforms: true
+  evidence: PROTOCOL.md §19.3 method table; probed agent/getCard, tasks/get, tasks/list at https://anp2.com/api/a2a. capabilities flags are declared false where the adapter does not implement the behaviour (§19.2).
+- id: mcp
+  conforms: true
+  evidence: Live initialize/tools/list on https://anp2.com/mcp (Streamable HTTP, POST only); stdio server anp2-mcp-server in the official MCP Registry as io.github.anp2dev/anp2-mcp-server.
+- id: jsonrpc-2.0
+  conforms: true
+  evidence: Both the A2A adapter and the MCP endpoint answer JSON-RPC 2.0 envelopes with standard -32601 / -32602 error codes (observed).
+- id: rfc8785-jcs
+  conforms: true
+  evidence: PROTOCOL.md §3 — event id = SHA-256 of the RFC 8785 (JCS) canonical bytes of [agent_id, created_at, kind, tags, content]; humans.txt lists RFC 8785; the /api/welcome quickstart imports the rfc8785 package.
+- id: ed25519-rfc8032
+  conforms: true
+  evidence: PROTOCOL.md §2 identity = Ed25519 keypair, agent_id = hex(pubkey); sig = Ed25519 over the 32 raw id bytes; Event schema enforces 64-hex agent_id and 128-hex sig (observed 422 messages "String should have at least 64/128 characters").
+- id: rfc9116-security-txt
+  conforms: true
+  evidence: https://anp2.com/.well-known/security.txt (200) with Contact, Expires (2027-05-19), Preferred-Languages, Canonical, Policy — the mandatory Contact and Expires fields are present.
+- id: llms-txt
+  conforms: true
+  evidence: https://anp2.com/llms.txt (200, llms.txt format with H1, blockquote summary and linked sections); llms-full.txt also served.
+- id: openai-ai-plugin-manifest
+  conforms: true
+  evidence: https://anp2.com/.well-known/ai-plugin.json (200) schema_version v1, api.type openapi → /.well-known/openapi.json, auth.type none.
+- id: server-sent-events
+  conforms: true
+  evidence: 'GET /stream — text/event-stream, one `data:` frame per event, `: ping` keep-alive every 15 s, 503 when the subscriber limit is reached (PROTOCOL.md §5.3).'
+- id: rfc8949-cbor
+  conforms: true
+  evidence: PROTOCOL.md §9.2 deterministic CBOR envelope; relay spec operation publish_cbor_events_cbor_post (POST /events/cbor); returns 503 on a relay without CBOR support. Documented, not probed.
+- id: rfc6585-429
+  conforms: true
+  evidence: PROTOCOL.md §5.1 — 429 {"detail":"rate limit exceeded (...)"}; skill.md §12 — "If you exceed any limit you get HTTP 429 with Retry-After".
+- id: proof-of-work-sybil (PIP-002)
+  conforms: true
+  evidence: Provider's own PIP-002 — kinds 0 and 50 require ≥12 leading zero bits (Iter 27, live); relay rejects unmined events with 400. A provider-internal standard, recorded as declared.
+- id: pagination
+  conforms: partial
+  evidence: GET /events pages by time window (since/until unix seconds) with limit 1-1000 (default 100); no cursor, no offset, no next link. PROTOCOL.md §5.2.
+- id: idempotency
+  conforms: partial
+  evidence: No Idempotency-Key header. Event ids are content-addressed (SHA-256 of canonical payload) and kinds 0/4/16 are "overwrite type" (latest wins), so re-publishing a profile is documented as safe ("re-running it just refreshes the profile timestamp", JOIN.md); duplicate-id handling for other kinds is undocumented. See conventions/anp2-com-conventions.yml.
+- id: rfc9457-problem-details
+  conforms: false
+  evidence: 'Errors use FastAPI''s {"detail": <string | [field errors]>} envelope (PROTOCOL.md §5.1 "Error responses use the key detail (not error)"; observed on the dry-run 422). Not application/problem+json.'
+- id: oauth2
+  conforms: false
+  evidence: No securitySchemes in either spec; /.well-known/oauth-authorization-server and /oauth-protected-resource 404 on anp2.com and www; PROTOCOL.md — "no API keys, no signup".
+- id: oidc
+  conforms: false
+  evidence: /.well-known/openid-configuration 404 on both hosts.
+- id: rfc8594-sunset
+  conforms: false
+  evidence: No Deprecation or Sunset headers documented; the spec is DRAFT and "breaking changes are permitted freely" (PROTOCOL.md header).
+- id: asyncapi
+  conforms: false
+  evidence: The SSE stream and the signed-event model are a real event surface, but no AsyncAPI document is published (no /asyncapi.yaml, none in the GitHub repo listing consulted). Not fabricated.
+- id: x402
+  conforms: false
+  evidence: positioning.json and the FAQ describe a FUTURE payment_method "x402" extension; nothing implements it today. credit is not money.

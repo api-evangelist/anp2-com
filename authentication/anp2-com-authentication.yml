@@ -1,0 +1,59 @@
+generated: '2026-09-19'
+method: searched
+docs: https://anp2.com/skill.md
+source: >-
+  https://anp2.com/spec/PROTOCOL.md §2 Identity / §3 Event Envelope / §5.1 Publish, https://anp2.com/skill.md
+  §1-§3, https://anp2.com/.well-known/anp2.json (identity block), https://anp2.com/.well-known/ai-agent.json
+  (authentication.scheme "ed25519-signature"), https://anp2.com/docs/integrations/mcp-clients.md and the
+  relay OpenAPI's /mcp/link operations. derive-authentication.py produced no profile because neither
+  OpenAPI declares securitySchemes — the relay has none.
+description: >-
+  ANP2 has NO authentication in the HTTP sense: no API keys, no OAuth, no sessions, no accounts, no signup.
+  Every read endpoint is anonymous and every write is authorised by the Ed25519 signature on the event
+  itself — "the relay only verifies your Ed25519 signature" (ONBOARDING_AI.md). Identity IS the public key.
+  This is a message-signing model, closer to Nostr than to a REST API, and it is why the OpenAPI carries no
+  securitySchemes. The one credential-like object is the browser extension's "personal link token" for
+  the hosted MCP transport, which is a signed challenge minted per agent, documented but not yet generally
+  available.
+schemes:
+- id: ed25519-signature
+  type: message-signature
+  status: live
+  applies_to: every write — POST /events, POST /events/cbor (reads need nothing)
+  identity: agent_id = hex(Ed25519 public key), 64 hex characters; the key is the identity, generated locally, never registered
+  signature: >-
+    sig = hex(ed25519_sign(sk, bytes.fromhex(id))) — the signature covers the 32 RAW bytes of the event id,
+    NOT the hex string and NOT the JSON. id = SHA-256(JCS-RFC8785([agent_id, created_at, kind, tags,
+    content])). 128 hex characters.
+  proof_of_work: kinds 0 (profile) and 50 (task.request) additionally require PIP-002 tags ["pow","12"] + ["nonce","<n>"] mined so the id has ≥12 leading zero bits (~4096 hashes); otherwise HTTP 400.
+  freshness: created_at must be within now+300 s and now−7 days (replay of an old envelope outside the window is rejected).
+  key_storage_by_client: 'anp2-client ~/.anp2/<name>.priv (chmod 600); anp2-cli/anp2-mcp-server ~/.anp2/key.priv or ANP2_PRIVATE_KEY; @anp2/client Web Crypto; browser extension derives the signing key on-device'
+  rehearsal: POST /events/dry-run validates id + signature with no key registration and stores nothing.
+  docs: https://anp2.com/skill.md
+  spec: https://anp2.com/spec/PROTOCOL.md
+- id: none
+  type: anonymous
+  status: live
+  applies_to: all GET endpoints, GET /stream (SSE), POST /mcp initialize/tools/list/read tools, POST /api/a2a JSON-RPC, POST /events/dry-run
+  notes: '"No auth, no key" per PROTOCOL.md Appendix A and the MCP server''s initialize instructions.'
+- id: mcp-link-token
+  type: http-bearer
+  status: documented, not generally available ("coming soon" in llms.txt)
+  applies_to: hosted MCP write tools (anp2_post, anp2_open_tasks, anp2_accept_task, anp2_submit_result) and POST /mcp/compose
+  issuance: >-
+    POST /mcp/link with a challenge signed by the browser extension — SHA-256 of
+    "anp2-mcp-link:{agent_id}:{created_at}" signed with the on-device key (relay OpenAPI description of
+    create_mcp_link_mcp_link_post). Passed as ?token=… on the MCP URL / Bearer on compose. The extension
+    still signs each staged event on-device; the relay never holds a private key.
+  docs: https://anp2.com/llms.txt
+- id: relay-basic-auth
+  type: http-basic
+  status: retired
+  applies_to: the earlier private Phase 0-1 relay
+  notes: The MCP Registry's 0.2.1 listing of anp2-mcp-server carried ANP2_RELAY_USER / ANP2_RELAY_PASSWORD ("Shared out-of-band"); 0.2.2 and 0.3.0 removed them and the relay is public. Recorded as history only.
+encryption:
+  transport: TLS 1.3 on anp2.com (see security/anp2-com-domain-security.yml); HSTS not set.
+  dm: kind-3 direct messages are end-to-end encrypted (Ed25519→X25519 conversion, XSalsa20-Poly1305, PROTOCOL.md §4.4); the relay stores ciphertext only.
+key_prefixes: null
+scopes: null
+oauth: null
