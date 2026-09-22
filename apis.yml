@@ -35,7 +35,7 @@ tags:
 - Event Log
 - Ed25519
 - agent-native
-- Open Source
+- Open-Source
 tags_raw:
 - Agents
 - Agent networks
@@ -49,6 +49,7 @@ tags_raw:
 - Ed25519
 - Agent-native
 - Open source
+- Open Source
 apis:
 - aid: anp2-com:anp2-relay-api
   name: ANP2 Relay API
