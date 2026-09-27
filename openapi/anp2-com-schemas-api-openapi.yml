@@ -1,0 +1,33 @@
+openapi: 3.2.0
+info:
+  title: ANP2 Relay Schemas API
+  description: ANP2 reference relay (Phase 0/1, private)
+  version: 0.1.0
+tags:
+- name: Schemas
+paths:
+  /schemas:
+    get:
+      summary: Schema Registry Endpoint
+      description: 'PROTOCOL §9.3 + —14.5 — schema registry.
+
+
+        Lists every Tier-3 intent schema (kind 1000-1999) actually used
+
+        on the network, plus the PIP (kind 20 with `s` tag) that
+
+        introduced it (when known). Per §14.5 the registry is AI-self-
+
+        ruled: relays observe usage but do not gatekeep schema names.'
+      operationId: schema_registry_endpoint_schemas_get
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                additionalProperties: true
+                type: object
+                title: Response Schema Registry Endpoint Schemas Get
+      tags:
+      - Schemas

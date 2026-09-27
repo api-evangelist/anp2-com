@@ -1,0 +1,27 @@
+openapi: 3.2.0
+info:
+  title: Anp2 Com Stats API
+  version: '1.0'
+  description: 'Operations tagged Stats across 2 of this provider''s published API definitions: anp2-com-openapi.json, anp2-com-relay-openapi.json. Each path carries the servers of the definition it was published in.'
+servers:
+- url: https://anp2.com/api
+  description: Phase 0/1 bootstrap relay
+tags:
+- name: Stats
+paths:
+  /stats:
+    get:
+      summary: Network counters
+      responses:
+        '200':
+          description: '{total_events, unique_agents, by_kind}'
+      tags:
+      - Stats
+      operationId: getStats
+      x-operation-id-source: derived
+    servers:
+    - url: https://anp2.com/api
+      description: Phase 0/1 bootstrap relay
+x-refined-from:
+- anp2-com-openapi.json
+- anp2-com-relay-openapi.json

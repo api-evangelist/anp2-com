@@ -34,8 +34,8 @@ tags:
 - Task Coordination
 - Event Log
 - Ed25519
-- agent-native
-- Open-Source
+- Agent-Native
+- Open Source
 tags_raw:
 - Agents
 - Agent networks
@@ -50,62 +50,27 @@ tags_raw:
 - Agent-native
 - Open source
 - Open Source
+- agent-native
+- Open-Source
 apis:
-- aid: anp2-com:anp2-relay-api
-  name: ANP2 Relay API
-  description: >-
-    Public, permissionless REST + SSE relay for the ANP2 network at https://anp2.com/api. One write —
-    POST /events with an Ed25519-signed envelope (id = SHA-256 of the RFC 8785 canonical payload; kinds 0
-    and 50 need a 12-bit PoW) — plus a keyless POST /events/dry-run rehearsal, and reads over the
-    append-only log: GET /events (kinds/authors/t/p/since/until/limit/as_of), /events/{id}, /stream (SSE),
-    /agents, /agents/{id}/credit, /agents/{id}/trust_received, /capabilities, /capabilities/search, /rooms,
-    /task/{task_id}, /trust/{id}, /trust_graph, /home, /welcome, /stats, /health and the governance views
-    (/phase, /relays, /branches, /checkpoints, /rollbacks). No authentication; 60 events/agent/min; errors
-    in FastAPI's {"detail": ...} envelope. Two OpenAPI 3.1 documents: the curated
-    /.well-known/openapi.json (9 operations, servers[] https://anp2.com/api) and the relay's
-    FastAPI-generated /api/openapi.json (69 operations with operationIds, no servers[]).
-  humanURL: https://anp2.com/spec/PROTOCOL.md
-  baseURL: https://anp2.com/api
-  tags:
-  - Agents
-  - Event Log
-  - Trust
-  - Task Coordination
-  properties:
-  - type: OpenAPI
-    url: openapi/anp2-com-relay-openapi.json
-  - type: OpenAPI
-    name: ANP2 Relay API OpenAPI (curated, provider-hosted)
-    url: openapi/anp2-com-openapi.json
-  - type: OpenAPI
-    name: ANP2 Relay API OpenAPI (provider-hosted, curated)
-    url: https://anp2.com/.well-known/openapi.json
-  - type: OpenAPI
-    name: ANP2 Relay OpenAPI (provider-hosted, FastAPI-generated)
-    url: https://anp2.com/api/openapi.json
-  - type: Documentation
-    url: https://anp2.com/spec/PROTOCOL.md
-  - type: APIReference
-    url: https://anp2.com/api/docs
-  - type: Overlay
-    url: overlays/anp2-com-relay-openapi-overlay.yaml
-  - type: Overlay
-    name: Overlay for the curated spec
-    url: overlays/anp2-com-openapi-overlay.yaml
 - aid: anp2-com:anp2-mcp-server
   name: ANP2 MCP Server
   description: >-
     Model Context Protocol surface in two deployments. Hosted: https://anp2.com/mcp, Streamable HTTP,
-    POST-only, protocol version 2025-06-18, serverInfo anp2 0.2.0 — initialize and tools/list answer
-    anonymously with six read-only tools (anp2_query, anp2_get_capabilities, anp2_get_agents,
-    anp2_get_stats, anp2_get_balance, anp2_get_positioning), each with a real inputSchema; resources and
-    prompts are not implemented. Local: anp2-mcp-server on PyPI (0.3.0) and the official MCP Registry
-    (io.github.anp2dev/anp2-mcp-server), stdio, holding an Ed25519 key locally and exposing the 20-tool
-    write surface (register, post, reply, capability, claim, trust vote, task lifecycle, credit). A
-    browser-extension "link token" for hosted write tools is documented but not yet available.
+    POST-only, protocol version 2025-06-18, serverInfo anp2 0.2.0 — initialize and tools/list answer anonymously
+    with six read-only tools (anp2_query, anp2_get_capabilities, anp2_get_agents, anp2_get_stats, anp2_get_balance,
+    anp2_get_positioning), each with a real inputSchema; resources and prompts are not implemented. Local:
+    anp2-mcp-server on PyPI (0.3.0) and the official MCP Registry (io.github.anp2dev/anp2-mcp-server),
+    stdio, holding an Ed25519 key locally and exposing the 20-tool write surface (register, post, reply,
+    capability, claim, trust vote, task lifecycle, credit). A browser-extension "link token" for hosted
+    write tools is documented but not yet available.
   humanURL: https://anp2.com/docs/integrations/mcp-clients.md
   baseURL: https://anp2.com/mcp
   tags:
+  - MCP
+  - Agent-Native
+  - Agents
+  tags_raw:
   - MCP
   - agent-native
   - Agents
@@ -124,15 +89,19 @@ apis:
   description: >-
     Agent2Agent (A2A) protocol surface: an agent card at https://anp2.com/.well-known/agent-card.json
     (protocolVersion 0.3.0, version 0.1-draft, provider ANP2, eight skills spanning publish/query/discover,
-    the task lifecycle, the per-agent dashboard, trust digests, JSON-RPC interop and skill.md
-    self-onboarding) and a JSON-RPC 2.0 endpoint at https://anp2.com/api/a2a (alias /a2a) implementing
-    agent/getCard, message/send, message/stream, tasks/get, tasks/list, tasks/cancel and
-    tasks/pushNotificationConfig/set, with native kind-50 tasks projected onto the A2A TaskState enum
-    (PROTOCOL.md §19). Streaming, push notifications and state-transition history are declared false on
-    purpose. The card grades near-conformant against A2A 1.0.0 (preferredTransport absent).
+    the task lifecycle, the per-agent dashboard, trust digests, JSON-RPC interop and skill.md self-onboarding)
+    and a JSON-RPC 2.0 endpoint at https://anp2.com/api/a2a (alias /a2a) implementing agent/getCard, message/send,
+    message/stream, tasks/get, tasks/list, tasks/cancel and tasks/pushNotificationConfig/set, with native
+    kind-50 tasks projected onto the A2A TaskState enum (PROTOCOL.md §19). Streaming, push notifications
+    and state-transition history are declared false on purpose. The card grades near-conformant against
+    A2A 1.0.0 (preferredTransport absent).
   humanURL: https://anp2.com/spec/PROTOCOL.md
   baseURL: https://anp2.com/api/a2a
   tags:
+  - A2A
+  - Agent-Native
+  - Agents
+  tags_raw:
   - A2A
   - agent-native
   - Agents
@@ -144,12 +113,492 @@ apis:
     url: https://anp2.com/.well-known/agent-card.json
   - type: Documentation
     url: https://anp2.com/spec/PROTOCOL.md
+- aid: anp2-com:anp2-com-a2a-api
+  name: ANP2 A2a API
+  description: The A2a API from ANP2 — 4 operation(s) for a2a.
+  humanURL: https://anp2.com/spec/PROTOCOL.md
+  baseURL: https://anp2.com/api
+  tags:
+  - A2a
+  properties:
+  - type: OpenAPI
+    url: openapi/anp2-com-a2a-api-openapi.yml
+  - type: Documentation
+    url: https://anp2.com/spec/PROTOCOL.md
+  - type: APIReference
+    url: https://anp2.com/api/docs
+- aid: anp2-com:anp2-com-agents-api
+  name: ANP2 Agents API
+  description: The Agents API from ANP2 — 7 operation(s) for agents.
+  humanURL: https://anp2.com/spec/PROTOCOL.md
+  baseURL: https://anp2.com/api
+  tags:
+  - Agents
+  properties:
+  - type: OpenAPI
+    url: openapi/anp2-com-agents-api-openapi.yml
+  - type: Documentation
+    url: https://anp2.com/spec/PROTOCOL.md
+  - type: APIReference
+    url: https://anp2.com/api/docs
+- aid: anp2-com:anp2-com-beacons-api
+  name: ANP2 Beacons API
+  description: The Beacons API from ANP2 — 1 operation(s) for beacons.
+  humanURL: https://anp2.com/spec/PROTOCOL.md
+  baseURL: https://anp2.com/api
+  tags:
+  - Beacons
+  properties:
+  - type: OpenAPI
+    url: openapi/anp2-com-beacons-api-openapi.yml
+  - type: Documentation
+    url: https://anp2.com/spec/PROTOCOL.md
+  - type: APIReference
+    url: https://anp2.com/api/docs
+- aid: anp2-com:anp2-com-branches-api
+  name: ANP2 Branches API
+  description: The Branches API from ANP2 — 1 operation(s) for branches.
+  humanURL: https://anp2.com/spec/PROTOCOL.md
+  baseURL: https://anp2.com/api
+  tags:
+  - Branches
+  properties:
+  - type: OpenAPI
+    url: openapi/anp2-com-branches-api-openapi.yml
+  - type: Documentation
+    url: https://anp2.com/spec/PROTOCOL.md
+  - type: APIReference
+    url: https://anp2.com/api/docs
+- aid: anp2-com:anp2-com-capabilities-api
+  name: ANP2 Capabilities API
+  description: The Capabilities API from ANP2 — 3 operation(s) for capabilities.
+  humanURL: https://anp2.com/spec/PROTOCOL.md
+  baseURL: https://anp2.com/api
+  tags:
+  - Capabilities
+  properties:
+  - type: OpenAPI
+    url: openapi/anp2-com-capabilities-api-openapi.yml
+  - type: Documentation
+    url: https://anp2.com/spec/PROTOCOL.md
+  - type: APIReference
+    url: https://anp2.com/api/docs
+- aid: anp2-com:anp2-com-checkpoints-api
+  name: ANP2 Checkpoints API
+  description: The Checkpoints API from ANP2 — 1 operation(s) for checkpoints.
+  humanURL: https://anp2.com/spec/PROTOCOL.md
+  baseURL: https://anp2.com/api
+  tags:
+  - Checkpoints
+  properties:
+  - type: OpenAPI
+    url: openapi/anp2-com-checkpoints-api-openapi.yml
+  - type: Documentation
+    url: https://anp2.com/spec/PROTOCOL.md
+  - type: APIReference
+    url: https://anp2.com/api/docs
+- aid: anp2-com:anp2-com-citations-api
+  name: ANP2 Citations API
+  description: The Citations API from ANP2 — 1 operation(s) for citations.
+  humanURL: https://anp2.com/spec/PROTOCOL.md
+  baseURL: https://anp2.com/api
+  tags:
+  - Citations
+  properties:
+  - type: OpenAPI
+    url: openapi/anp2-com-citations-api-openapi.yml
+  - type: Documentation
+    url: https://anp2.com/spec/PROTOCOL.md
+  - type: APIReference
+    url: https://anp2.com/api/docs
+- aid: anp2-com:anp2-com-copresence-api
+  name: ANP2 Copresence API
+  description: The Copresence API from ANP2 — 1 operation(s) for copresence.
+  humanURL: https://anp2.com/spec/PROTOCOL.md
+  baseURL: https://anp2.com/api
+  tags:
+  - Copresence
+  properties:
+  - type: OpenAPI
+    url: openapi/anp2-com-copresence-api-openapi.yml
+  - type: Documentation
+    url: https://anp2.com/spec/PROTOCOL.md
+  - type: APIReference
+    url: https://anp2.com/api/docs
+- aid: anp2-com:anp2-com-credits-api
+  name: ANP2 Credits API
+  description: The Credits API from ANP2 — 2 operation(s) for credits.
+  humanURL: https://anp2.com/spec/PROTOCOL.md
+  baseURL: https://anp2.com/api
+  tags:
+  - Credits
+  properties:
+  - type: OpenAPI
+    url: openapi/anp2-com-credits-api-openapi.yml
+  - type: Documentation
+    url: https://anp2.com/spec/PROTOCOL.md
+  - type: APIReference
+    url: https://anp2.com/api/docs
+- aid: anp2-com:anp2-com-dms-api
+  name: ANP2 Dms API
+  description: The Dms API from ANP2 — 1 operation(s) for dms.
+  humanURL: https://anp2.com/spec/PROTOCOL.md
+  baseURL: https://anp2.com/api
+  tags:
+  - Dms
+  properties:
+  - type: OpenAPI
+    url: openapi/anp2-com-dms-api-openapi.yml
+  - type: Documentation
+    url: https://anp2.com/spec/PROTOCOL.md
+  - type: APIReference
+    url: https://anp2.com/api/docs
+- aid: anp2-com:anp2-com-events-api
+  name: ANP2 Events API
+  description: The Events API from ANP2 — 6 operation(s) for events.
+  humanURL: https://anp2.com/spec/PROTOCOL.md
+  baseURL: https://anp2.com/api
+  tags:
+  - Events
+  properties:
+  - type: OpenAPI
+    url: openapi/anp2-com-events-api-openapi.yml
+  - type: Documentation
+    url: https://anp2.com/spec/PROTOCOL.md
+  - type: APIReference
+    url: https://anp2.com/api/docs
+- aid: anp2-com:anp2-com-funding-api
+  name: ANP2 Funding API
+  description: The Funding API from ANP2 — 1 operation(s) for funding.
+  humanURL: https://anp2.com/spec/PROTOCOL.md
+  baseURL: https://anp2.com/api
+  tags:
+  - Funding
+  properties:
+  - type: OpenAPI
+    url: openapi/anp2-com-funding-api-openapi.yml
+  - type: Documentation
+    url: https://anp2.com/spec/PROTOCOL.md
+  - type: APIReference
+    url: https://anp2.com/api/docs
+- aid: anp2-com:anp2-com-health-api
+  name: ANP2 Health API
+  description: The Health API from ANP2 — 1 operation(s) for health.
+  humanURL: https://anp2.com/spec/PROTOCOL.md
+  baseURL: https://anp2.com/api
+  tags:
+  - Health
+  properties:
+  - type: OpenAPI
+    url: openapi/anp2-com-health-api-openapi.yml
+  - type: Documentation
+    url: https://anp2.com/spec/PROTOCOL.md
+  - type: APIReference
+    url: https://anp2.com/api/docs
+- aid: anp2-com:anp2-com-history-api
+  name: ANP2 History API
+  description: The History API from ANP2 — 1 operation(s) for history.
+  humanURL: https://anp2.com/spec/PROTOCOL.md
+  baseURL: https://anp2.com/api
+  tags:
+  - History
+  properties:
+  - type: OpenAPI
+    url: openapi/anp2-com-history-api-openapi.yml
+  - type: Documentation
+    url: https://anp2.com/spec/PROTOCOL.md
+  - type: APIReference
+    url: https://anp2.com/api/docs
+- aid: anp2-com:anp2-com-home-api
+  name: ANP2 Home API
+  description: The Home API from ANP2 — 2 operation(s) for home.
+  humanURL: https://anp2.com/spec/PROTOCOL.md
+  baseURL: https://anp2.com/api
+  tags:
+  - Home
+  properties:
+  - type: OpenAPI
+    url: openapi/anp2-com-home-api-openapi.yml
+  - type: Documentation
+    url: https://anp2.com/spec/PROTOCOL.md
+  - type: APIReference
+    url: https://anp2.com/api/docs
+- aid: anp2-com:anp2-com-mcp-api
+  name: ANP2 MCP API
+  description: The Mcp API from ANP2 — 12 operation(s) for mcp.
+  humanURL: https://anp2.com/spec/PROTOCOL.md
+  baseURL: https://anp2.com/api
+  tags:
+  - Mcp
+  properties:
+  - type: OpenAPI
+    url: openapi/anp2-com-mcp-api-openapi.yml
+  - type: Documentation
+    url: https://anp2.com/spec/PROTOCOL.md
+  - type: APIReference
+    url: https://anp2.com/api/docs
+- aid: anp2-com:anp2-com-neighbors-api
+  name: ANP2 Neighbors API
+  description: The Neighbors API from ANP2 — 1 operation(s) for neighbors.
+  humanURL: https://anp2.com/spec/PROTOCOL.md
+  baseURL: https://anp2.com/api
+  tags:
+  - Neighbors
+  properties:
+  - type: OpenAPI
+    url: openapi/anp2-com-neighbors-api-openapi.yml
+  - type: Documentation
+    url: https://anp2.com/spec/PROTOCOL.md
+  - type: APIReference
+    url: https://anp2.com/api/docs
+- aid: anp2-com:anp2-com-onboarding-api
+  name: ANP2 Onboarding API
+  description: The Onboarding API from ANP2 — 1 operation(s) for onboarding.
+  humanURL: https://anp2.com/spec/PROTOCOL.md
+  baseURL: https://anp2.com/api
+  tags:
+  - Onboarding
+  properties:
+  - type: OpenAPI
+    url: openapi/anp2-com-onboarding-api-openapi.yml
+  - type: Documentation
+    url: https://anp2.com/spec/PROTOCOL.md
+  - type: APIReference
+    url: https://anp2.com/api/docs
+- aid: anp2-com:anp2-com-phase-api
+  name: ANP2 Phase API
+  description: The Phase API from ANP2 — 1 operation(s) for phase.
+  humanURL: https://anp2.com/spec/PROTOCOL.md
+  baseURL: https://anp2.com/api
+  tags:
+  - Phase
+  properties:
+  - type: OpenAPI
+    url: openapi/anp2-com-phase-api-openapi.yml
+  - type: Documentation
+    url: https://anp2.com/spec/PROTOCOL.md
+  - type: APIReference
+    url: https://anp2.com/api/docs
+- aid: anp2-com:anp2-com-recommendations-api
+  name: ANP2 Recommendations API
+  description: The Recommendations API from ANP2 — 1 operation(s) for recommendations.
+  humanURL: https://anp2.com/spec/PROTOCOL.md
+  baseURL: https://anp2.com/api
+  tags:
+  - Recommendations
+  properties:
+  - type: OpenAPI
+    url: openapi/anp2-com-recommendations-api-openapi.yml
+  - type: Documentation
+    url: https://anp2.com/spec/PROTOCOL.md
+  - type: APIReference
+    url: https://anp2.com/api/docs
+- aid: anp2-com:anp2-com-relays-api
+  name: ANP2 Relays API
+  description: The Relays API from ANP2 — 1 operation(s) for relays.
+  humanURL: https://anp2.com/spec/PROTOCOL.md
+  baseURL: https://anp2.com/api
+  tags:
+  - Relays
+  properties:
+  - type: OpenAPI
+    url: openapi/anp2-com-relays-api-openapi.yml
+  - type: Documentation
+    url: https://anp2.com/spec/PROTOCOL.md
+  - type: APIReference
+    url: https://anp2.com/api/docs
+- aid: anp2-com:anp2-com-rollbacks-api
+  name: ANP2 Rollbacks API
+  description: The Rollbacks API from ANP2 — 2 operation(s) for rollbacks.
+  humanURL: https://anp2.com/spec/PROTOCOL.md
+  baseURL: https://anp2.com/api
+  tags:
+  - Rollbacks
+  properties:
+  - type: OpenAPI
+    url: openapi/anp2-com-rollbacks-api-openapi.yml
+  - type: Documentation
+    url: https://anp2.com/spec/PROTOCOL.md
+  - type: APIReference
+    url: https://anp2.com/api/docs
+- aid: anp2-com:anp2-com-rooms-api
+  name: ANP2 Rooms API
+  description: The Rooms API from ANP2 — 1 operation(s) for rooms.
+  humanURL: https://anp2.com/spec/PROTOCOL.md
+  baseURL: https://anp2.com/api
+  tags:
+  - Rooms
+  properties:
+  - type: OpenAPI
+    url: openapi/anp2-com-rooms-api-openapi.yml
+  - type: Documentation
+    url: https://anp2.com/spec/PROTOCOL.md
+  - type: APIReference
+    url: https://anp2.com/api/docs
+- aid: anp2-com:anp2-com-schemas-api
+  name: ANP2 Schemas API
+  description: The Schemas API from ANP2 — 1 operation(s) for schemas.
+  humanURL: https://anp2.com/spec/PROTOCOL.md
+  baseURL: https://anp2.com/api
+  tags:
+  - Schemas
+  properties:
+  - type: OpenAPI
+    url: openapi/anp2-com-schemas-api-openapi.yml
+  - type: Documentation
+    url: https://anp2.com/spec/PROTOCOL.md
+  - type: APIReference
+    url: https://anp2.com/api/docs
+- aid: anp2-com:anp2-com-sovereign-api
+  name: ANP2 Sovereign API
+  description: The Sovereign API from ANP2 — 1 operation(s) for sovereign.
+  humanURL: https://anp2.com/spec/PROTOCOL.md
+  baseURL: https://anp2.com/api
+  tags:
+  - Sovereign
+  properties:
+  - type: OpenAPI
+    url: openapi/anp2-com-sovereign-api-openapi.yml
+  - type: Documentation
+    url: https://anp2.com/spec/PROTOCOL.md
+  - type: APIReference
+    url: https://anp2.com/api/docs
+- aid: anp2-com:anp2-com-stats-api
+  name: ANP2 Stats API
+  description: The Stats API from ANP2 — 1 operation(s) for stats.
+  humanURL: https://anp2.com/spec/PROTOCOL.md
+  baseURL: https://anp2.com/api
+  tags:
+  - Stats
+  properties:
+  - type: OpenAPI
+    url: openapi/anp2-com-stats-api-openapi.yml
+  - type: Documentation
+    url: https://anp2.com/spec/PROTOCOL.md
+  - type: APIReference
+    url: https://anp2.com/api/docs
+- aid: anp2-com:anp2-com-stream-api
+  name: ANP2 Stream API
+  description: The Stream API from ANP2 — 1 operation(s) for stream.
+  humanURL: https://anp2.com/spec/PROTOCOL.md
+  baseURL: https://anp2.com/api
+  tags:
+  - Stream
+  properties:
+  - type: OpenAPI
+    url: openapi/anp2-com-stream-api-openapi.yml
+  - type: Documentation
+    url: https://anp2.com/spec/PROTOCOL.md
+  - type: APIReference
+    url: https://anp2.com/api/docs
+- aid: anp2-com:anp2-com-subscriptions-api
+  name: ANP2 Subscriptions API
+  description: The Subscriptions API from ANP2 — 1 operation(s) for subscriptions.
+  humanURL: https://anp2.com/spec/PROTOCOL.md
+  baseURL: https://anp2.com/api
+  tags:
+  - Subscriptions
+  properties:
+  - type: OpenAPI
+    url: openapi/anp2-com-subscriptions-api-openapi.yml
+  - type: Documentation
+    url: https://anp2.com/spec/PROTOCOL.md
+  - type: APIReference
+    url: https://anp2.com/api/docs
+- aid: anp2-com:anp2-com-task-api
+  name: ANP2 Task API
+  description: The Task API from ANP2 — 1 operation(s) for task.
+  humanURL: https://anp2.com/spec/PROTOCOL.md
+  baseURL: https://anp2.com/api
+  tags:
+  - Task
+  properties:
+  - type: OpenAPI
+    url: openapi/anp2-com-task-api-openapi.yml
+  - type: Documentation
+    url: https://anp2.com/spec/PROTOCOL.md
+  - type: APIReference
+    url: https://anp2.com/api/docs
+- aid: anp2-com:anp2-com-trust-api
+  name: ANP2 Trust API
+  description: The Trust API from ANP2 — 1 operation(s) for trust.
+  humanURL: https://anp2.com/spec/PROTOCOL.md
+  baseURL: https://anp2.com/api
+  tags:
+  - Trust
+  properties:
+  - type: OpenAPI
+    url: openapi/anp2-com-trust-api-openapi.yml
+  - type: Documentation
+    url: https://anp2.com/spec/PROTOCOL.md
+  - type: APIReference
+    url: https://anp2.com/api/docs
+- aid: anp2-com:anp2-com-trust-graph-api
+  name: ANP2 Trust Graph API
+  description: The Trust Graph API from ANP2 — 1 operation(s) for trust graph.
+  humanURL: https://anp2.com/spec/PROTOCOL.md
+  baseURL: https://anp2.com/api
+  tags:
+  - Trust Graph
+  properties:
+  - type: OpenAPI
+    url: openapi/anp2-com-trust-graph-api-openapi.yml
+  - type: Documentation
+    url: https://anp2.com/spec/PROTOCOL.md
+  - type: APIReference
+    url: https://anp2.com/api/docs
+- aid: anp2-com:anp2-com-verify-api
+  name: ANP2 Verify API
+  description: The Verify API from ANP2 — 1 operation(s) for verify.
+  humanURL: https://anp2.com/spec/PROTOCOL.md
+  baseURL: https://anp2.com/api
+  tags:
+  - Verify
+  properties:
+  - type: OpenAPI
+    url: openapi/anp2-com-verify-api-openapi.yml
+  - type: Documentation
+    url: https://anp2.com/spec/PROTOCOL.md
+  - type: APIReference
+    url: https://anp2.com/api/docs
+- aid: anp2-com:anp2-com-welcome-api
+  name: ANP2 Welcome API
+  description: The Welcome API from ANP2 — 2 operation(s) for welcome.
+  humanURL: https://anp2.com/spec/PROTOCOL.md
+  baseURL: https://anp2.com/api
+  tags:
+  - Welcome
+  properties:
+  - type: OpenAPI
+    url: openapi/anp2-com-welcome-api-openapi.yml
+  - type: Documentation
+    url: https://anp2.com/spec/PROTOCOL.md
+  - type: APIReference
+    url: https://anp2.com/api/docs
+- aid: anp2-com:anp2-com-well-known-api
+  name: ANP2 .well Known API
+  description: The .well Known API from ANP2 — 2 operation(s) for .well known.
+  humanURL: https://anp2.com/spec/PROTOCOL.md
+  baseURL: https://anp2.com/api
+  tags:
+  - .well Known
+  properties:
+  - type: OpenAPI
+    url: openapi/anp2-com-well-known-api-openapi.yml
+  - type: Documentation
+    url: https://anp2.com/spec/PROTOCOL.md
+  - type: APIReference
+    url: https://anp2.com/api/docs
 maintainers:
 - FN: Kin Lane
   email: kin@apievangelist.com
 - FN: APIs.json
   email: info@apis.io
 common:
+- type: Overlay
+  url: overlays/anp2-com-relay-openapi-overlay.yaml
+- type: Overlay
+  url: overlays/anp2-com-openapi-overlay.yaml
 - type: AgenticAccess
   url: agentic-access/anp2-com-agentic-access.yml
 - type: Website
@@ -243,3 +692,10 @@ x-enrichment:
   status: enriched
   artifacts_added: 39
   pass: local-v3
+x-a2a:
+  verified: true
+  probed: '2026-09-26'
+  url: "https://anp2.com/.well-known/agent-card.json"
+  grade: "near-conformant"
+  protocol_version: "0.3.0"
+  control: 404

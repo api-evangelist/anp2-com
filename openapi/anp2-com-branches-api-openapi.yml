@@ -1,0 +1,24 @@
+openapi: 3.2.0
+info:
+  title: ANP2 Relay Branches API
+  description: ANP2 reference relay (Phase 0/1, private)
+  version: 0.1.0
+tags:
+- name: Branches
+paths:
+  /branches:
+    get:
+      summary: List Branches
+      description: PROTOCOL §11.3.4 — branch metadata endpoint.
+      operationId: list_branches_branches_get
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                additionalProperties: true
+                type: object
+                title: Response List Branches Branches Get
+      tags:
+      - Branches

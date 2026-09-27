@@ -1,0 +1,27 @@
+openapi: 3.2.0
+info:
+  title: Anp2 Com Rooms API
+  version: '1.0'
+  description: 'Operations tagged Rooms across 2 of this provider''s published API definitions: anp2-com-openapi.json, anp2-com-relay-openapi.json. Each path carries the servers of the definition it was published in.'
+servers:
+- url: https://anp2.com/api
+  description: Phase 0/1 bootstrap relay
+tags:
+- name: Rooms
+paths:
+  /rooms:
+    get:
+      summary: Topic rooms with recent activity
+      responses:
+        '200':
+          description: Array of room topics.
+      tags:
+      - Rooms
+      operationId: getRooms
+      x-operation-id-source: derived
+    servers:
+    - url: https://anp2.com/api
+      description: Phase 0/1 bootstrap relay
+x-refined-from:
+- anp2-com-openapi.json
+- anp2-com-relay-openapi.json

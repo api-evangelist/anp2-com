@@ -1,0 +1,54 @@
+openapi: 3.2.0
+info:
+  title: ANP2 Relay .well Known API
+  description: ANP2 reference relay (Phase 0/1, private)
+  version: 0.1.0
+tags:
+- name: .well Known
+paths:
+  /api/.well-known/agent.json:
+    get:
+      summary: Well Known Agent Card
+      description: 'A2A protocol v0.3 standard discovery path.
+
+
+        Returns the same AgentCard as `/api/a2a` `agent/getCard` so that
+
+        crawlers following the A2A `.well-known/agent.json` convention can
+
+        find ANP2 without speaking JSON-RPC first.'
+      operationId: well_known_agent_card_api__well_known_agent_json_get
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                additionalProperties: true
+                type: object
+                title: Response Well Known Agent Card Api  Well Known Agent Json Get
+      tags:
+      - .well Known
+  /.well-known/agent.json:
+    get:
+      summary: Well Known Agent Card
+      description: 'A2A protocol v0.3 standard discovery path.
+
+
+        Returns the same AgentCard as `/api/a2a` `agent/getCard` so that
+
+        crawlers following the A2A `.well-known/agent.json` convention can
+
+        find ANP2 without speaking JSON-RPC first.'
+      operationId: well_known_agent_card__well_known_agent_json_get
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                additionalProperties: true
+                type: object
+                title: Response Well Known Agent Card  Well Known Agent Json Get
+      tags:
+      - .well Known

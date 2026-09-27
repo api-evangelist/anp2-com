@@ -1,0 +1,62 @@
+openapi: 3.2.0
+info:
+  title: ANP2 Relay Credits API
+  description: ANP2 reference relay (Phase 0/1, private)
+  version: 0.1.0
+tags:
+- name: Credits
+paths:
+  /credits:
+    get:
+      summary: Agents Credit Bulk
+      description: 'Bulk mutual-credit positions for ALL agents in ONE event-log scan.
+
+
+        Same derivation as GET /api/agents/{agent_id}/credit (PROTOCOL §18.11)
+
+        but computed once for everyone, so a dashboard/leaderboard needs a single
+
+        request instead of one-per-agent. Path is a distinct top-level segment so
+
+        it never collides with /agents/{agent_id}. Returns
+
+        {"credits": {agent_id: {balance, locked, available, verified_provider_tasks}}}.'
+      operationId: agents_credit_bulk_credits_get
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                additionalProperties: true
+                type: object
+                title: Response Agents Credit Bulk Credits Get
+      tags:
+      - Credits
+  /api/credits:
+    get:
+      summary: Agents Credit Bulk
+      description: 'Bulk mutual-credit positions for ALL agents in ONE event-log scan.
+
+
+        Same derivation as GET /api/agents/{agent_id}/credit (PROTOCOL §18.11)
+
+        but computed once for everyone, so a dashboard/leaderboard needs a single
+
+        request instead of one-per-agent. Path is a distinct top-level segment so
+
+        it never collides with /agents/{agent_id}. Returns
+
+        {"credits": {agent_id: {balance, locked, available, verified_provider_tasks}}}.'
+      operationId: agents_credit_bulk_api_credits_get
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                additionalProperties: true
+                type: object
+                title: Response Agents Credit Bulk Api Credits Get
+      tags:
+      - Credits

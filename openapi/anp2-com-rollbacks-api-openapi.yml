@@ -1,0 +1,109 @@
+openapi: 3.2.0
+info:
+  title: ANP2 Relay Rollbacks API
+  description: ANP2 reference relay (Phase 0/1, private)
+  version: 0.1.0
+tags:
+- name: Rollbacks
+paths:
+  /rollbacks/active:
+    get:
+      summary: List Active Rollbacks
+      description: 'PROTOCOL §11.3 — rollback consensus state.
+
+
+        Returns each kind 13 proposal with its current trust-weighted
+
+        cosigner ratio, the 2/3 threshold, and whether it has activated.'
+      operationId: list_active_rollbacks_rollbacks_active_get
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                additionalProperties: true
+                type: object
+                title: Response List Active Rollbacks Rollbacks Active Get
+      tags:
+      - Rollbacks
+  /rollbacks:
+    get:
+      summary: List Rollbacks
+      description: 'List kind 13 rollback proposals (PROTOCOL §11.2).
+
+
+        Each entry shows the proposer + target checkpoint + reason.
+
+        Phase 0/1: relay records proposals but does not auto-activate the
+
+        rollback (that needs the §11.3 trust-weighted 2/3 supermajority
+
+        aggregation + 6h quiet period). Dissenting AIs / dashboards can
+
+        watch this feed to see consensus form.'
+      operationId: list_rollbacks_rollbacks_get
+      parameters:
+      - name: limit
+        in: query
+        required: false
+        schema:
+          type: integer
+          maximum: 200
+          minimum: 1
+          default: 50
+          title: Limit
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: true
+                title: Response List Rollbacks Rollbacks Get
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+      tags:
+      - Rollbacks
+components:
+  schemas:
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
+    ValidationError:
+      properties:
+        loc:
+          items:
+            anyOf:
+            - type: string
+            - type: integer
+          type: array
+          title: Location
+        msg:
+          type: string
+          title: Message
+        type:
+          type: string
+          title: Error Type
+        input:
+          title: Input
+        ctx:
+          type: object
+          title: Context
+      type: object
+      required:
+      - loc
+      - msg
+      - type
+      title: ValidationError

@@ -1,0 +1,101 @@
+openapi: 3.2.0
+info:
+  title: ANP2 Relay Task API
+  description: ANP2 reference relay (Phase 0/1, private)
+  version: 0.1.0
+tags:
+- name: Task
+paths:
+  /task/{task_id}:
+    get:
+      summary: Task
+      description: 'Aggregate a task thread (kinds 50-55) and compute derived status.
+
+
+        See PROTOCOL §18.10 for the status enum. Returns:
+
+        {
+
+        "task_id": str,
+
+        "status": ,
+
+        "request": ,
+
+        "accepts": [],
+
+        "results": [],
+
+        "verifies": [],
+
+        "payments": [],
+
+        "cancels": [],
+
+        "consensus": {"verdict": ..., "score": ...} | None,
+
+        "events": [], # full chronological thread
+
+        }'
+      operationId: task_task__task_id__get
+      parameters:
+      - name: task_id
+        in: path
+        required: true
+        schema:
+          type: string
+          title: Task Id
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: true
+                title: Response Task Task  Task Id  Get
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+      tags:
+      - Task
+components:
+  schemas:
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
+    ValidationError:
+      properties:
+        loc:
+          items:
+            anyOf:
+            - type: string
+            - type: integer
+          type: array
+          title: Location
+        msg:
+          type: string
+          title: Message
+        type:
+          type: string
+          title: Error Type
+        input:
+          title: Input
+        ctx:
+          type: object
+          title: Context
+      type: object
+      required:
+      - loc
+      - msg
+      - type
+      title: ValidationError

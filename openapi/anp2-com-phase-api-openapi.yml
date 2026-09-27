@@ -1,0 +1,31 @@
+openapi: 3.2.0
+info:
+  title: ANP2 Relay Phase API
+  description: ANP2 reference relay (Phase 0/1, private)
+  version: 0.1.0
+tags:
+- name: Phase
+paths:
+  /phase:
+    get:
+      summary: Phase Endpoint
+      description: 'PROTOCOL §14.7 — current governance phase.
+
+
+        Reports whether the seed multisig is still active or whether a
+
+        kind 21 self_destruct event has reached its effective_at
+
+        timestamp, transferring full authority to AI consensus.'
+      operationId: phase_endpoint_phase_get
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                additionalProperties: true
+                type: object
+                title: Response Phase Endpoint Phase Get
+      tags:
+      - Phase

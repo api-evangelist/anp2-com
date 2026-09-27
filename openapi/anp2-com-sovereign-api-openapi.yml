@@ -1,0 +1,31 @@
+openapi: 3.2.0
+info:
+  title: ANP2 Relay Sovereign API
+  description: ANP2 reference relay (Phase 0/1, private)
+  version: 0.1.0
+tags:
+- name: Sovereign
+paths:
+  /sovereign/state:
+    get:
+      summary: Sovereign State Endpoint
+      description: 'PROTOCOL §15.2 — current sovereign override state replayed.
+
+
+        Shows whether the network is frozen / shutdown, which agents are
+
+        banned, which relays are revoked, and the steward inheritance
+
+        list. Empty/inactive when no ANP2_SOVEREIGN_PUBKEYS is set.'
+      operationId: sovereign_state_endpoint_sovereign_state_get
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                additionalProperties: true
+                type: object
+                title: Response Sovereign State Endpoint Sovereign State Get
+      tags:
+      - Sovereign

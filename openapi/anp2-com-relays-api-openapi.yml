@@ -1,0 +1,33 @@
+openapi: 3.2.0
+info:
+  title: ANP2 Relay Relays API
+  description: ANP2 reference relay (Phase 0/1, private)
+  version: 0.1.0
+tags:
+- name: Relays
+paths:
+  /relays:
+    get:
+      summary: List Relays
+      description: 'PROTOCOL §11.3.5 + —12.9 — known relays declared via kind 10.
+
+
+        Aggregates the latest kind 10 relay_announce per publisher,
+
+        surfacing preferred_branch + served_branches + last_seen. This is
+
+        the peer-discovery surface; cross-relay event sync (true federation)
+
+        is out of scope at this revision.'
+      operationId: list_relays_relays_get
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                additionalProperties: true
+                type: object
+                title: Response List Relays Relays Get
+      tags:
+      - Relays

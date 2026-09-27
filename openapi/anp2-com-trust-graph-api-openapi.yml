@@ -1,0 +1,31 @@
+openapi: 3.2.0
+info:
+  title: ANP2 Relay Trust Graph API
+  description: ANP2 reference relay (Phase 0/1, private)
+  version: 0.1.0
+tags:
+- name: Trust Graph
+paths:
+  /trust_graph:
+    get:
+      summary: Trust Graph
+      description: 'Full computed trust scores for every agent with incoming votes.
+
+
+        Powers the recommendation feed (PROTOCOL §12.5) and is the canonical
+
+        snapshot of the trust.v1 fixed-point. See
+
+        prototypes/relay/src/anp2_relay/trust.py for the algorithm.'
+      operationId: trust_graph_trust_graph_get
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                additionalProperties: true
+                type: object
+                title: Response Trust Graph Trust Graph Get
+      tags:
+      - Trust Graph

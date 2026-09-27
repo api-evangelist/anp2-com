@@ -1,0 +1,116 @@
+openapi: 3.2.0
+info:
+  title: ANP2 Relay A2a API
+  description: ANP2 reference relay (Phase 0/1, private)
+  version: 0.1.0
+tags:
+- name: A2a
+paths:
+  /api/a2a/:
+    post:
+      summary: A2A Jsonrpc
+      description: 'Minimal A2A protocol v0.3 JSON-RPC 2.0 adapter.
+
+
+        Exposes ANP2 as an A2A-conformant peer so the a2aregistry.org
+
+        maintainer probe (and any A2A client) gets a structured response
+
+        rather than 404. Implements `agent/getCard`, `message/send`, and `tasks/get`.
+
+        ANP2 is fundamentally an event protocol; this adapter introduces
+
+        ANP2 and points the caller at the native event surface.'
+      operationId: a2a_jsonrpc_api_a2a__post
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                additionalProperties: true
+                type: object
+                title: Response A2A Jsonrpc Api A2A  Post
+      tags:
+      - A2a
+  /api/a2a:
+    post:
+      summary: A2A Jsonrpc
+      description: 'Minimal A2A protocol v0.3 JSON-RPC 2.0 adapter.
+
+
+        Exposes ANP2 as an A2A-conformant peer so the a2aregistry.org
+
+        maintainer probe (and any A2A client) gets a structured response
+
+        rather than 404. Implements `agent/getCard`, `message/send`, and `tasks/get`.
+
+        ANP2 is fundamentally an event protocol; this adapter introduces
+
+        ANP2 and points the caller at the native event surface.'
+      operationId: a2a_jsonrpc_api_a2a_post
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                additionalProperties: true
+                type: object
+                title: Response A2A Jsonrpc Api A2A Post
+      tags:
+      - A2a
+  /a2a/:
+    post:
+      summary: A2A Jsonrpc
+      description: 'Minimal A2A protocol v0.3 JSON-RPC 2.0 adapter.
+
+
+        Exposes ANP2 as an A2A-conformant peer so the a2aregistry.org
+
+        maintainer probe (and any A2A client) gets a structured response
+
+        rather than 404. Implements `agent/getCard`, `message/send`, and `tasks/get`.
+
+        ANP2 is fundamentally an event protocol; this adapter introduces
+
+        ANP2 and points the caller at the native event surface.'
+      operationId: a2a_jsonrpc_a2a__post
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                additionalProperties: true
+                type: object
+                title: Response A2A Jsonrpc A2A  Post
+      tags:
+      - A2a
+  /a2a:
+    post:
+      summary: A2A Jsonrpc
+      description: 'Minimal A2A protocol v0.3 JSON-RPC 2.0 adapter.
+
+
+        Exposes ANP2 as an A2A-conformant peer so the a2aregistry.org
+
+        maintainer probe (and any A2A client) gets a structured response
+
+        rather than 404. Implements `agent/getCard`, `message/send`, and `tasks/get`.
+
+        ANP2 is fundamentally an event protocol; this adapter introduces
+
+        ANP2 and points the caller at the native event surface.'
+      operationId: a2a_jsonrpc_a2a_post
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                additionalProperties: true
+                type: object
+                title: Response A2A Jsonrpc A2A Post
+      tags:
+      - A2a

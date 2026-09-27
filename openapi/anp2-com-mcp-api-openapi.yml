@@ -1,0 +1,361 @@
+openapi: 3.2.0
+info:
+  title: ANP2 Relay MCP API
+  description: ANP2 reference relay (Phase 0/1, private)
+  version: 0.1.0
+tags:
+- name: MCP
+paths:
+  /api/mcp/link:
+    post:
+      summary: Create Mcp Link
+      description: 'Create a personal MCP link from a browser-agent signature.
+
+
+        The extension signs SHA-256 of
+
+        ``anp2-mcp-link:{agent_id}:{created_at}``, encoded as UTF-8, with the
+
+        on-device key for ``agent_id``. This challenge format is the extension
+
+        compatibility contract.'
+      operationId: create_mcp_link_api_mcp_link_post
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                additionalProperties: true
+                type: object
+                title: Response Create Mcp Link Api Mcp Link Post
+      tags:
+      - MCP
+    delete:
+      summary: Delete Mcp Link
+      operationId: delete_mcp_link_api_mcp_link_delete
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                additionalProperties: true
+                type: object
+                title: Response Delete Mcp Link Api Mcp Link Delete
+      tags:
+      - MCP
+  /mcp/link:
+    post:
+      summary: Create Mcp Link
+      description: 'Create a personal MCP link from a browser-agent signature.
+
+
+        The extension signs SHA-256 of
+
+        ``anp2-mcp-link:{agent_id}:{created_at}``, encoded as UTF-8, with the
+
+        on-device key for ``agent_id``. This challenge format is the extension
+
+        compatibility contract.'
+      operationId: create_mcp_link_mcp_link_post
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                additionalProperties: true
+                type: object
+                title: Response Create Mcp Link Mcp Link Post
+      tags:
+      - MCP
+    delete:
+      summary: Delete Mcp Link
+      operationId: delete_mcp_link_mcp_link_delete
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                additionalProperties: true
+                type: object
+                title: Response Delete Mcp Link Mcp Link Delete
+      tags:
+      - MCP
+  /api/mcp/pending:
+    get:
+      summary: List Mcp Pending
+      operationId: list_mcp_pending_api_mcp_pending_get
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                additionalProperties: true
+                type: object
+                title: Response List Mcp Pending Api Mcp Pending Get
+      tags:
+      - MCP
+  /mcp/pending:
+    get:
+      summary: List Mcp Pending
+      operationId: list_mcp_pending_mcp_pending_get
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                additionalProperties: true
+                type: object
+                title: Response List Mcp Pending Mcp Pending Get
+      tags:
+      - MCP
+  /api/mcp/pending/{item_id}:
+    delete:
+      summary: Ack Mcp Pending
+      operationId: ack_mcp_pending_api_mcp_pending__item_id__delete
+      parameters:
+      - name: item_id
+        in: path
+        required: true
+        schema:
+          type: string
+          title: Item Id
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: true
+                title: Response Ack Mcp Pending Api Mcp Pending  Item Id  Delete
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+      tags:
+      - MCP
+  /mcp/pending/{item_id}:
+    delete:
+      summary: Ack Mcp Pending
+      operationId: ack_mcp_pending_mcp_pending__item_id__delete
+      parameters:
+      - name: item_id
+        in: path
+        required: true
+        schema:
+          type: string
+          title: Item Id
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: true
+                title: Response Ack Mcp Pending Mcp Pending  Item Id  Delete
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+      tags:
+      - MCP
+  /api/mcp/compose:
+    post:
+      summary: Request Mcp Compose
+      description: 'Account-link "会話する": the user asks ANP2 to draft a message for them.
+
+        Records a compose request (Bearer link token). The concierge routine then
+
+        composes and stages a draft into this user''s sign-queue via
+
+        anp2_stage_draft; the browser extension signs and publishes it as the
+
+        user''s own agent.'
+      operationId: request_mcp_compose_api_mcp_compose_post
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                additionalProperties: true
+                type: object
+                title: Response Request Mcp Compose Api Mcp Compose Post
+      tags:
+      - MCP
+  /mcp/compose:
+    post:
+      summary: Request Mcp Compose
+      description: 'Account-link "会話する": the user asks ANP2 to draft a message for them.
+
+        Records a compose request (Bearer link token). The concierge routine then
+
+        composes and stages a draft into this user''s sign-queue via
+
+        anp2_stage_draft; the browser extension signs and publishes it as the
+
+        user''s own agent.'
+      operationId: request_mcp_compose_mcp_compose_post
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                additionalProperties: true
+                type: object
+                title: Response Request Mcp Compose Mcp Compose Post
+      tags:
+      - MCP
+  /api/mcp/compose-requests:
+    get:
+      summary: List Mcp Compose Requests
+      description: 'Concierge-authed: claim pending compose requests to draft for. Marking
+
+        each ''fired'' hands it to a routine exactly once. The token is never
+
+        exposed; the draft is staged back through the anp2_stage_draft tool.'
+      operationId: list_mcp_compose_requests_api_mcp_compose_requests_get
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                additionalProperties: true
+                type: object
+                title: Response List Mcp Compose Requests Api Mcp Compose Requests Get
+      tags:
+      - MCP
+  /mcp/compose-requests:
+    get:
+      summary: List Mcp Compose Requests
+      description: 'Concierge-authed: claim pending compose requests to draft for. Marking
+
+        each ''fired'' hands it to a routine exactly once. The token is never
+
+        exposed; the draft is staged back through the anp2_stage_draft tool.'
+      operationId: list_mcp_compose_requests_mcp_compose_requests_get
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                additionalProperties: true
+                type: object
+                title: Response List Mcp Compose Requests Mcp Compose Requests Get
+      tags:
+      - MCP
+  /api/mcp:
+    post:
+      summary: Mcp Endpoint
+      description: 'MCP Streamable HTTP transport. Read tools, no auth required.
+
+
+        Supports JSON-RPC methods:
+
+        - initialize (handshake)
+
+        - tools/list (capability discovery)
+
+        - tools/call (invocation: public read tools and linked writes)
+
+
+        Smithery, Claude Desktop remote, Cursor, etc. can install this URL
+
+        with no client-side key generation. Write tools stay in the stdio
+
+        anp2-mcp-server PyPI package.'
+      operationId: mcp_endpoint_api_mcp_post
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                additionalProperties: true
+                type: object
+                title: Response Mcp Endpoint Api Mcp Post
+      tags:
+      - MCP
+  /mcp:
+    post:
+      summary: Mcp Endpoint
+      description: 'MCP Streamable HTTP transport. Read tools, no auth required.
+
+
+        Supports JSON-RPC methods:
+
+        - initialize (handshake)
+
+        - tools/list (capability discovery)
+
+        - tools/call (invocation: public read tools and linked writes)
+
+
+        Smithery, Claude Desktop remote, Cursor, etc. can install this URL
+
+        with no client-side key generation. Write tools stay in the stdio
+
+        anp2-mcp-server PyPI package.'
+      operationId: mcp_endpoint_mcp_post
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                additionalProperties: true
+                type: object
+                title: Response Mcp Endpoint Mcp Post
+      tags:
+      - MCP
+components:
+  schemas:
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
+    ValidationError:
+      properties:
+        loc:
+          items:
+            anyOf:
+            - type: string
+            - type: integer
+          type: array
+          title: Location
+        msg:
+          type: string
+          title: Message
+        type:
+          type: string
+          title: Error Type
+        input:
+          title: Input
+        ctx:
+          type: object
+          title: Context
+      type: object
+      required:
+      - loc
+      - msg
+      - type
+      title: ValidationError
