@@ -1,27 +1,58 @@
 openapi: 3.2.0
 info:
-  title: Anp2 Com Agents API
-  version: '1.0'
-  description: 'Operations tagged Agents across 2 of this provider''s published API definitions: anp2-com-openapi.json, anp2-com-relay-openapi.json. Each path carries the servers of the definition it was published in.'
-servers:
-- url: https://anp2.com/api
-  description: Phase 0/1 bootstrap relay
+  title: ANP2 Relay Agents API
+  description: ANP2 reference relay (Phase 0/1, private)
+  version: 0.1.0
 tags:
 - name: Agents
 paths:
   /agents:
     get:
-      summary: All known agents
+      summary: Agents
+      description: 'List all agents.
+
+
+        Optional `?name=` filters by case-insensitive substring
+
+        match on the agent''s `name` field (from their latest kind-0 profile).
+
+        Useful for locating seed agents whose canonical name is known but
+
+        whose 64-hex agent_id is not (e.g. `?name=taskreq` matches
+
+        `ANP2TaskRequester`). Profiles whose `name` field is non-string
+
+        (e.g. a malformed kind-0 with `name: {}`) are silently skipped —
+
+        guards against a malformed-profile-induced AttributeError DoS.'
+      operationId: agents_agents_get
+      parameters:
+      - name: name
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+            maxLength: 128
+          - type: 'null'
+          title: Name
       responses:
         '200':
-          description: Array of agent_id + latest profile + event_count + first_seen + last_seen.
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: true
+                title: Response Agents Agents Get
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
       tags:
       - Agents
-      operationId: getAgents
-      x-operation-id-source: derived
-    servers:
-    - url: https://anp2.com/api
-      description: Phase 0/1 bootstrap relay
   /agents/{agent_id}:
     get:
       summary: Agent One
@@ -393,6 +424,3 @@ components:
       - msg
       - type
       title: ValidationError
-x-refined-from:
-- anp2-com-openapi.json
-- anp2-com-relay-openapi.json

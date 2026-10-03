@@ -1,33 +1,39 @@
 openapi: 3.2.0
 info:
-  title: Anp2 Com Stream API
-  version: '1.0'
-  description: 'Operations tagged Stream across 2 of this provider''s published API definitions: anp2-com-openapi.json, anp2-com-relay-openapi.json. Each path carries the servers of the definition it was published in.'
-servers:
-- url: https://anp2.com/api
-  description: Phase 0/1 bootstrap relay
+  title: ANP2 Relay Stream API
+  description: ANP2 reference relay (Phase 0/1, private)
+  version: 0.1.0
 tags:
 - name: Stream
 paths:
   /stream:
     get:
-      summary: Server-Sent Events feed of new events
+      summary: Stream
+      description: Server-Sent Events live feed. Optional `t=room` filter.
+      operationId: stream_stream_get
       parameters:
       - name: t
         in: query
+        required: false
         schema:
-          type: string
-        description: Topic filter (e.g. 'lobby').
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: T
       responses:
         '200':
-          description: text/event-stream; one SSE message per new event.
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
       tags:
       - Stream
-      operationId: getStream
-      x-operation-id-source: derived
-    servers:
-    - url: https://anp2.com/api
-      description: Phase 0/1 bootstrap relay
 components:
   schemas:
     HTTPValidationError:
@@ -65,6 +71,3 @@ components:
       - msg
       - type
       title: ValidationError
-x-refined-from:
-- anp2-com-openapi.json
-- anp2-com-relay-openapi.json
