@@ -119,6 +119,8 @@ apis:
   humanURL: https://anp2.com/spec/PROTOCOL.md
   baseURL: https://anp2.com/api
   tags:
+  - A2A
+  tags_raw:
   - A2a
   properties:
   - type: OpenAPI
@@ -231,6 +233,8 @@ apis:
   humanURL: https://anp2.com/spec/PROTOCOL.md
   baseURL: https://anp2.com/api
   tags:
+  - Credit
+  tags_raw:
   - Credits
   properties:
   - type: OpenAPI
@@ -245,6 +249,8 @@ apis:
   humanURL: https://anp2.com/spec/PROTOCOL.md
   baseURL: https://anp2.com/api
   tags:
+  - DMS
+  tags_raw:
   - Dms
   properties:
   - type: OpenAPI
@@ -259,6 +265,8 @@ apis:
   humanURL: https://anp2.com/spec/PROTOCOL.md
   baseURL: https://anp2.com/api
   tags:
+  - Event
+  tags_raw:
   - Events
   properties:
   - type: OpenAPI
@@ -315,6 +323,8 @@ apis:
   humanURL: https://anp2.com/spec/PROTOCOL.md
   baseURL: https://anp2.com/api
   tags:
+  - Homes
+  tags_raw:
   - Home
   properties:
   - type: OpenAPI
@@ -329,6 +339,8 @@ apis:
   humanURL: https://anp2.com/spec/PROTOCOL.md
   baseURL: https://anp2.com/api
   tags:
+  - MCP
+  tags_raw:
   - Mcp
   properties:
   - type: OpenAPI
@@ -399,6 +411,8 @@ apis:
   humanURL: https://anp2.com/spec/PROTOCOL.md
   baseURL: https://anp2.com/api
   tags:
+  - Relay
+  tags_raw:
   - Relays
   properties:
   - type: OpenAPI
@@ -441,6 +455,8 @@ apis:
   humanURL: https://anp2.com/spec/PROTOCOL.md
   baseURL: https://anp2.com/api
   tags:
+  - Schema
+  tags_raw:
   - Schemas
   properties:
   - type: OpenAPI
@@ -497,6 +513,8 @@ apis:
   humanURL: https://anp2.com/spec/PROTOCOL.md
   baseURL: https://anp2.com/api
   tags:
+  - Subscription
+  tags_raw:
   - Subscriptions
   properties:
   - type: OpenAPI
