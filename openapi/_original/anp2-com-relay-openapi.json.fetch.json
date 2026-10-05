@@ -1,0 +1,12 @@
+{
+ "url": "https://anp2.com/api/openapi.json",
+ "requested_url": "https://anp2.com/api/openapi.json",
+ "status": 200,
+ "content_type": "application/json",
+ "bytes": 64367,
+ "sha256": "8af636e4dc901d581a15d81c886b40174704ce023d5fb7e823035ea4e4998eb6",
+ "fetched_at": "2026-10-04",
+ "fetched_by": "APIEvangelist-Harvest/1.0 (+https://apievangelist.com)",
+ "match": "byte-identical",
+ "note": "Re-fetched from the provider by verify-openapi-sources.py; the archived file is byte-identical to what the provider serves."
+}
