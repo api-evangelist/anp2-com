@@ -613,6 +613,8 @@ maintainers:
 - FN: APIs.json
   email: info@apis.io
 common:
+- type: Pricing
+  url: https://anp2.com/docs/FAQ.md
 - type: Overlay
   url: overlays/anp2-com-relay-openapi-overlay.yaml
 - type: Overlay
