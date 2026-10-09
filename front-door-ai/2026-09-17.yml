@@ -1,0 +1,35 @@
+# Front Door AI Index — anp2-com — 2026-09-17
+# AI vocabulary counted on the provider's root page. Generated; do not edit.
+# `score` is null unless ownership is `own` — see front_door_ai.py.
+front_door_ai:
+  slug: anp2-com
+  lexicon_version: '1.0'
+  probed_at: '2026-09-25'
+  host: anp2.com
+  final_host: anp2.com
+  ownership: own
+  owner: anp2-com
+  shares_host_with: null
+  inherited_from: null
+  alias_of: null
+  verdict: scored
+  score: 30
+  band: 6
+  band_label: dominant
+  host_score: 30
+  density: 21.08
+  words: 1423
+  tiers:
+    agentic: 12
+    core: 14
+    model: 4
+  ambiguous: 39
+  top_terms:
+    agent: 39
+    AI: 13
+    MCP: 6
+    AI agent: 5
+    Claude: 3
+    LLMs: 1
+    OpenAI: 1
+    llms.txt: 1
