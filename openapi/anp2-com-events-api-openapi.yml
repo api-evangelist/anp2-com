@@ -336,32 +336,19 @@ components:
           title: Detail
       type: object
       title: HTTPValidationError
-    ValidationError:
+    PublishResponse:
       properties:
-        loc:
-          items:
-            anyOf:
-            - type: string
-            - type: integer
-          type: array
-          title: Location
-        msg:
+        id:
           type: string
-          title: Message
-        type:
-          type: string
-          title: Error Type
-        input:
-          title: Input
-        ctx:
-          type: object
-          title: Context
+          title: Id
+        accepted:
+          type: boolean
+          title: Accepted
       type: object
       required:
-      - loc
-      - msg
-      - type
-      title: ValidationError
+      - id
+      - accepted
+      title: PublishResponse
     Event:
       properties:
         id:
@@ -406,16 +393,29 @@ components:
       - kind
       - sig
       title: Event
-    PublishResponse:
+    ValidationError:
       properties:
-        id:
+        loc:
+          items:
+            anyOf:
+            - type: string
+            - type: integer
+          type: array
+          title: Location
+        msg:
           type: string
-          title: Id
-        accepted:
-          type: boolean
-          title: Accepted
+          title: Message
+        type:
+          type: string
+          title: Error Type
+        input:
+          title: Input
+        ctx:
+          type: object
+          title: Context
       type: object
       required:
-      - id
-      - accepted
-      title: PublishResponse
+      - loc
+      - msg
+      - type
+      title: ValidationError
