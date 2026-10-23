@@ -21,3 +21,9 @@ paths:
                 title: Response Stats Stats Get
       tags:
       - Stats
+x-provenance:
+  method: harvested
+  publisher: ANP2
+  source: https://anp2.com/.well-known/openapi.json
+  note: split by refine-openapis from the provider's own published document, verified by fetch (openapi/_original/*.fetch.json);
+    stamped by stamp-openapi-provenance.py (roadmap#793)
